@@ -16,7 +16,8 @@ Find the details related to Vanilla SCALE-Sim at the link below:
     activate.bat
     ```
 
-    ![Alt text](image.png)
+    <img src="readme-images/creating_venv.png" alt="Alt text" width=50% />
+
 
 2. Clone the ```scale-sim-v2``` folder from [SparseSim](https://github.gatech.edu/HML8803-Spring24/Team9_Sparsity_SCALE_Sim) git repository in ```..\<virtual-environment-name>\``` path. [Clone the repository elsewhere, and copy the ```scale-sim-v2``` folder inside the ```..\<virtual-environment-name>\``` path.]
 
@@ -26,7 +27,7 @@ Find the details related to Vanilla SCALE-Sim at the link below:
     ```
     In this case, \path_to_scalesim_cloned_folder\ will be ```..\<virtual-environment-name>\scale-sim-v2```
 
-    ![Alt text](image-1.png)
+    <img src="readme-images/scalesim_install.png" alt="Alt text" width=100% />
 
 ## Using SparseSim
 1. Modify the ```run_name``` if required in the ```system.cfg``` file.
