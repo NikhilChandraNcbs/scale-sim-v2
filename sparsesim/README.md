@@ -35,19 +35,19 @@ Find the details related to Vanilla SCALE-Sim at the link below:
 2. We have provided two topology files, one for general matrix multiplication operation (GEMM) and another for convolution operation (CONV).
 
 
-    1. conv_mix.csv : The command to run CONV topology file is 
+    1. ```conv_mix.csv``` : The command to run CONV topology file is 
         ```
         python scalesim/scale.py -c sparsesim/system.cfg -t sparsesim/conv_mix.csv -p sparsesim/hml_conv_results
         ```
 
-    2. gemm_mix.csv : The command to run GEMM topology file is 
+    2. ```gemm_mix.csv``` : The command to run GEMM topology file is 
         ```
         python scalesim/scale.py -c sparsesim/system.cfg -t sparsesim/gemm_mix.csv -p sparsesim/hml_gemm_results -i gemm
         ```
 
-    The corresponding sparsity information related to the layers in this topology file are found in /sparsesim/layers/
+    The corresponding sparsity information related to the layers in this topology file are found in ```/sparsesim/layers/```
 
-3. Along with existing reports, SPARSE_REPORT.csv is generated, which will compare the storage after sparsity is enabled.
+3. Along with existing reports, ```SPARSE_REPORT.csv``` is generated, which will compare the storage after sparsity is enabled.
 
 ## Modifications done to the original ScaleSim repository
 
