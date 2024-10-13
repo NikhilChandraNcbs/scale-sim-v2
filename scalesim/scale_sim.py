@@ -59,13 +59,14 @@ class scalesim:
         else: 
             self.config_file = config_filename
         
-        if not os.path.exists(sparsity_directory):
-            print("ERROR: scalesim.scale.py: Sparsity directory not found") 
-            print("Input path:" + sparsity_directory)
-            print('Exiting')
-            exit()
-        else:
-            self.sparsity_dir = sparsity_directory
+        if sparsity_directory != "":
+            if not os.path.exists(sparsity_directory):
+                print("ERROR: scalesim.scale.py: Sparsity directory not found") 
+                print("Input path:" + sparsity_directory)
+                print('Exiting')
+                exit()
+            else:
+                self.sparsity_dir = sparsity_directory
 
         # Parse config first
         self.config.read_conf_file(self.config_file)

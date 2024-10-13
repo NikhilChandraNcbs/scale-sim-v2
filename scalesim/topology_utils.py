@@ -59,6 +59,9 @@ class topologies(object):
         first = True
 
         for row in f:
+            # DEBUG
+            print("row in load_array_gemm")
+            print(row)
             row = row.strip()
             if first:
                 first = False
@@ -69,19 +72,18 @@ class topologies(object):
                 elems = row.split(',')[:-1]
                 assert len(elems) > 3, 'There should be at least 4 entries per row'
                 layer_name = elems[0].strip()
-                # print("@@@@@@@@@@@@@@", layer_name)
-
                 m = elems[1].strip()
                 n = elems[2].strip()
                 k = elems[3].strip()
-                # sparse_array = elems[4].strip()
 
                 # Entries: layer name, Ifmap h, ifmap w, filter h, filter w, num_ch, num_filt, stride h, stride w
-                entries = [layer_name, m, k, 1, k, 1, n, 1, 1]
-                # entries = [layer_name, m, k, 1, k, 1, n, 1, sparse_array]
+                entries = [layer_name, m,       k,       1,        k,        1,      n,        1,        1]
                 #entries are later iterated from index 1. Index 0 is used to store layer name in convolution mode. So, to rectify assignment of M, N and K in GEMM mode, layer name has been added at index 0 of entries. 
                 self.append_topo_arrays(layer_name=layer_name, elems=entries, sparsity_dir=sparsity_dir)
 
+        #DEBUG
+        print("topo arrays after append_topo_arrays")
+        print(self.topo_arrays)
         self.num_layers = len(self.topo_arrays)
         self.topo_load_flag = True
 
@@ -162,20 +164,26 @@ class topologies(object):
         entry = [layer_name]
 
         for i in range(1, len(elems)):
-            if i != 8:
-                val = int(str(elems[i]).strip())
-                entry.append(val)
-                if i == 7 and len(elems) < (9+1):
-                    entry.append(val) 
-            if i == 8:
-                # file_path = f'sparsesim\layers\{layer_name}.txt'
-                file_path = os.path.join(sparsity_dir, f'{layer_name}.txt')
-                with open(file_path, 'r') as file:
-                    content = file.read()
-                    sparse_array = ast.literal_eval(content)
+            val = int(str(elems[i]).strip())
+            entry.append(val)
+            if i == 7 and len(elems) < 9:
+                entry.append(val)  # Add the same stride in the col direction automatically
+        
+        # Reading sparsity bitmap file
+        # file_path = f'sparsesim\layers\{layer_name}.txt'
+        if sparsity_dir != "":
+            file_path = os.path.join(sparsity_dir, f'{layer_name}.txt')
+            with open(file_path, 'r') as file:
+                content = file.read()
+                sparse_array = ast.literal_eval(content)
 
-                entry.append(np.array(sparse_array))
+            entry.append(np.array(sparse_array))
+        else:
+            entry.append(None)
 
+
+        print("printing entry")
+        print(entry)
 
         # ISSUE #9 Fix
         assert entry[3] <= entry[1], 'Filter height cannot be larger than IFMAP height'
@@ -350,6 +358,7 @@ class topologies(object):
         layer_calc_params = self.layers_calculated_hyperparams[layer_id]
         num_filters = self.get_layer_num_filters(layer_id)
         num_ofmap_px = layer_calc_params[0] * layer_calc_params[1] * num_filters 
+        print("layer_calc_params[0] * layer_calc_params[1] * num_filters = ", layer_calc_params[0], layer_calc_params[1], num_filters )
         return num_ofmap_px
 
     def get_layer_ofmap_dims(self, layer_id=0):

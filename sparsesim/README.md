@@ -39,6 +39,9 @@ Find the details related to Vanilla SCALE-Sim at the link below:
         ```
         python scalesim/scale.py -c sparsesim/system.cfg -t sparsesim/conv_mix.csv -p sparsesim/hml_conv_results
         ```
+        ```
+        python scalesim/scale.py -c configs/vegeta.cfg -t topologies/sparsity/gemm_mix.csv -p sparsesim/sparsity_results -s sparsity_layers -i gemm
+        ```
 
     2. ```gemm_mix.csv``` : The command to run GEMM topology file is 
         ```

@@ -1,0 +1,2 @@
+LayerID, Sparsity Representation, Original Filter Storage, New Storage (Filter+Metadata), Filter Metadata Storage, Avg FILTER Metadata SRAM BW, 
+0, csr, 64, 81, 49, 1.8148148148148149,

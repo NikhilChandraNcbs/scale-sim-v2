@@ -21,7 +21,7 @@ if __name__ == '__main__':
                         help="Type of input topology, gemm: MNK, conv: conv"
                         )
     parser.add_argument('-s', metavar='sparsity dir', type=str,
-                        default="../sparsity_layers",
+                        default="",
                         help="Path to sparsity dir"
                         )
 
