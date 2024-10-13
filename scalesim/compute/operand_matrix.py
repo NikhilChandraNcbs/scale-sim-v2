@@ -126,7 +126,10 @@ class operand_matrix(object):
         retcode_3 = self.create_ofmap_matrix()
 
         # DEBUG
-        print("these are the demand matrices")
+        print("these are the operand matrices")
+        print(self.ifmap_addr_matrix.shape)
+        print(self.filter_addr_matrix.shape)
+        print(self.ofmap_addr_matrix.shape)        
         print(self.ifmap_addr_matrix)
         print(self.filter_addr_matrix)
         print(self.ofmap_addr_matrix)
@@ -151,31 +154,33 @@ class operand_matrix(object):
         print("self.batch_size in ifmap function is ", self.batch_size)
         row_indices = np.arange(self.batch_size * self.ofmap_px_per_filt)
         col_indices = np.arange(self.conv_window_size)
-        print("row_indices")
-        print(row_indices)
-        print("col_indices")
-        print(col_indices)
+        # print("row_indices")
+        # print(row_indices)
+        # print("col_indices")
+        # print(col_indices)
         # Create 2D index arrays using meshgrid
         i, j = np.meshgrid(row_indices, col_indices, indexing='ij')
-        print("i meshgrid")
-        print(i)
-        print("j meshgrid")
-        print(j)
+        # print("i meshgrid")
+        # print(i)
+        # print("j meshgrid")
+        # print(j)
 
         # Call calc_ifmap_elem_addr_numpy with 2D index arrays
         self.ifmap_addr_matrix = self.calc_ifmap_elem_addr(i, j)
         print("self.ifmap_addr_matrix")
+        print(self.ifmap_addr_matrix.shape)
         print(self.ifmap_addr_matrix)
 
         if self.config.sparsity_support:
             # Ampere: 2 tiles were always reduced to 1 (if the rows are dense, then we cannot)
             # temp_matrix = self.ifmap_addr_matrix[:,0:int(self.ifmap_addr_matrix.shape[1]/2)]
-
+            print("Input sparsity being applied")
             sparsity_ratio = self.config.sparsity_N / self.config.sparsity_M
             print(self.config.sparsity_N)
             print(self.config.sparsity_M)
             print(sparsity_ratio)
-            temp_matrix = self.ifmap_addr_matrix[:,0:int(self.ifmap_addr_matrix.shape[1] * sparsity_ratio)]
+            print(self.ifmap_addr_matrix.shape[1], "*", sparsity_ratio, "=", math.ceil(self.ifmap_addr_matrix.shape[1] * sparsity_ratio))
+            temp_matrix = self.ifmap_addr_matrix[:,0:math.ceil(self.ifmap_addr_matrix.shape[1] * sparsity_ratio)]
             self.ifmap_addr_matrix = temp_matrix
             print("self.ifmap_addr_matrix for sparsity")
             print(self.ifmap_addr_matrix)
@@ -319,11 +324,12 @@ class operand_matrix(object):
         self.filter_addr_matrix = self.calc_filter_elem_addr(row_indices, col_indices)
 
         # DEBUG
-        print("row_indices")
-        print(row_indices)
-        print("col_indices")
-        print(col_indices)
+        # print("row_indices")
+        # print(row_indices)
+        # print("col_indices")
+        # print(col_indices)
         print("self.filter_addr_matrix")
+        print(self.filter_addr_matrix.shape)
         print(self.filter_addr_matrix)
 
         if self.config.sparsity_support == True:
