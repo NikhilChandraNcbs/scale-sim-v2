@@ -128,7 +128,7 @@ class single_layer_sim:
             elif self.config.sparsity_representation == 'csc':
                 original_storage, new_storage, metadata_storage = self.compression.get_csc_storage(sparse_array_np)
             elif self.config.sparsity_representation == 'ellpack_block':
-                original_storage, new_storage, metadata_storage = self.compression.get_ellpack_block_storage(sparse_array_np, filter_op_mat)
+                original_storage, new_storage, metadata_storage = self.compression.get_ellpack_block_storage(sparse_array_np, filter_op_mat, self.config.sparsity_M)
 
             self.original_filter_size += original_storage
             self.new_filter_size += new_storage
@@ -168,8 +168,13 @@ class single_layer_sim:
         ifmap_demand_mat, filter_demand_mat, ofmap_demand_mat = self.compute_system.get_demand_matrices()
 
         print("These are the demand matrices")
+        # with np.printoptions(threshold=np.inf, linewidth=120):
+        print("ifmap_demand_mat demand matrix")
         print(ifmap_demand_mat)
+        # with np.printoptions(threshold=np.inf):
+        print("filter_demand_mat demand matrix")
         print(filter_demand_mat)
+        print("ofmap_demand_mat demand matrix")
         print(ofmap_demand_mat)
         #print('DEBUG: Compute operations done')
         # 2. Setup the memory system and run the demands through it to find any memory bottleneck and generate traces

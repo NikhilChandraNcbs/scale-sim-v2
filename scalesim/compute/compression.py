@@ -1,4 +1,5 @@
 import numpy as np
+import math
 
 class compression:
     def compress_to_csr(self, matrix):
@@ -39,14 +40,14 @@ class compression:
 
         return np.array(data), np.array(row_id), np.array(col_ptr), original_storage, new_storage, metadata_storage
 
-    def compress_to_ellpack_block(self, matrix, filter_op_mat):
+    def compress_to_ellpack_block(self, matrix, filter_op_mat, sparsity_M):
         # Each entry of the original matrix requires 1 word size
         # Each entry in filter_op_mat will require 2 bits of metadata
         original_rows, original_cols = matrix.shape
         new_rows, new_cols = filter_op_mat.shape
 
         original_storage = original_rows * original_cols # Units: Words
-        metadata_storage = ((new_rows * new_cols) * 2) / 32 # Units: Words (considering 1 word = 4 bytes = 32 bits)
+        metadata_storage = ((new_rows * new_cols) * math.ceil(math.log2(sparsity_M))) / 32 # Units: Words (considering 1 word = 4 bytes = 32 bits)
         new_storage = (new_rows * new_cols) + metadata_storage # Units: Words (considering 1 word = 4 bytes = 32 bits)
 
         return original_storage, new_storage, metadata_storage
@@ -107,8 +108,8 @@ class compression:
         data, row_id, col_ptr, original_storage, new_storage, metadata_storage = self.compress_to_csc(matrix)
         return original_storage, new_storage, metadata_storage
 
-    def get_ellpack_block_storage(self, matrix, filter_op_mat):
-        original_storage, new_storage, metadata_storage = self.compress_to_ellpack_block(matrix, filter_op_mat)
+    def get_ellpack_block_storage(self, matrix, filter_op_mat, sparsity_M):
+        original_storage, new_storage, metadata_storage = self.compress_to_ellpack_block(matrix, filter_op_mat, sparsity_M)
         return original_storage, new_storage, metadata_storage
 
     def get_csr_extra_cycles(self, matrix):

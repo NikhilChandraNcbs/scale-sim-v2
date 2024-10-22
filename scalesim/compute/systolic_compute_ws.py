@@ -166,6 +166,8 @@ class systolic_compute_ws:
             else:
                 self.filter_prefetch_matrix = np.concatenate((self.filter_prefetch_matrix, this_fold_prefetch), axis=0)
 
+        print("printing self.filter_prefetch_matrix is ws.py")
+        print(self.filter_prefetch_matrix)
         # Note: ISSUE #15: no skewing happens in the Filter for WS so this issue does not apply.
 
     #
@@ -218,10 +220,16 @@ class systolic_compute_ws:
                 # Indexing the cols with row start and row end idx are correct
                 # See the comment on ifmap_prefetch generation
                 this_fold_demand = self.ifmap_op_mat[:,col_start_id: col_end_idx]
+                # print("<<<<<<<<<<<<<<<<<<this_fold_demand>>>>>>>>>>>>>>>>>>>>>>>")
+                # with np.printoptions(threshold=np.inf, linewidth=120):
+                #     print(this_fold_demand)
+                
                 if self.config.sparsity_support:
-                    self.ifmap_reads += self.arr_col * 2
+                    # A single block of input is shared among M/N rows, hence a row needs to be read M/N times (assume absence of any broadcast)
+                    self.ifmap_reads += this_fold_demand.shape[0] * this_fold_demand.shape[1] * (self.config.sparsity_M / self.config.sparsity_N)
                 else:
                     self.ifmap_reads += this_fold_demand.shape[0] * this_fold_demand.shape[1]
+                print(self.ifmap_reads)
 
                 # Take into account under utilization
                 if delta > 0:
@@ -236,6 +244,9 @@ class systolic_compute_ws:
 
                 # Add skew to the IFMAP demand matrix to reflect systolic pipeline fill
                 this_fold_demand = skew_matrix(this_fold_demand)
+
+                # with np.printoptions(threshold=np.inf, linewidth=120):
+                #     print(this_fold_demand)
 
                 ifmap_demand_matrix_list.append(this_fold_demand)
                 #if fr == 0 and fc == 0:
@@ -327,7 +338,8 @@ class systolic_compute_ws:
         if False:
             if self.config.sparsity_support == True:
                 self.filter_demand_matrix = np.concatenate((metadata_conversion_mat, self.filter_demand_matrix), axis=0)
-
+        print("printing self.filter_demand_matrix in ws.py")
+        print(self.filter_demand_matrix)
         # No skew needed in filters for weight stationary
 
     #
