@@ -1,0 +1,114 @@
+printing entry
+['Embedding', 512, 512, 1, 1, 3, 4096, 1, 1, None]
+printing entry
+['Attention_1', 512, 512, 1, 1, 4096, 16, 1, 1, None]
+printing entry
+['Attention_2', 512, 512, 1, 1, 4096, 16, 1, 1, None]
+printing entry
+['Attention_3', 512, 512, 1, 1, 4096, 16, 1, 1, None]
+printing entry
+['Attention_4', 512, 512, 1, 1, 4096, 16, 1, 1, None]
+printing entry
+['Attention_5', 512, 512, 1, 1, 4096, 16, 1, 1, None]
+printing entry
+['Attention_6', 512, 512, 1, 1, 4096, 16, 1, 1, None]
+printing entry
+['Attention_7', 512, 512, 1, 1, 4096, 16, 1, 1, None]
+printing entry
+['Attention_8', 512, 512, 1, 1, 4096, 16, 1, 1, None]
+printing entry
+['Attention_9', 512, 512, 1, 1, 4096, 16, 1, 1, None]
+printing entry
+['Attention_10', 512, 512, 1, 1, 4096, 16, 1, 1, None]
+printing entry
+['Attention_11', 512, 512, 1, 1, 4096, 16, 1, 1, None]
+printing entry
+['Attention_12', 512, 512, 1, 1, 4096, 16, 1, 1, None]
+printing entry
+['Attention_13', 512, 512, 1, 1, 4096, 16, 1, 1, None]
+printing entry
+['Attention_14', 512, 512, 1, 1, 4096, 16, 1, 1, None]
+printing entry
+['Attention_15', 512, 512, 1, 1, 4096, 16, 1, 1, None]
+printing entry
+['Attention_16', 512, 512, 1, 1, 4096, 16, 1, 1, None]
+printing entry
+['Attention_17', 512, 512, 1, 1, 4096, 16, 1, 1, None]
+printing entry
+['Attention_18', 512, 512, 1, 1, 4096, 16, 1, 1, None]
+printing entry
+['Attention_19', 512, 512, 1, 1, 4096, 16, 1, 1, None]
+printing entry
+['Attention_20', 512, 512, 1, 1, 4096, 16, 1, 1, None]
+printing entry
+['Attention_21', 512, 512, 1, 1, 4096, 16, 1, 1, None]
+printing entry
+['Attention_22', 512, 512, 1, 1, 4096, 16, 1, 1, None]
+printing entry
+['Attention_23', 512, 512, 1, 1, 4096, 16, 1, 1, None]
+printing entry
+['Attention_24', 512, 512, 1, 1, 4096, 16, 1, 1, None]
+printing entry
+['FeedForward_1', 512, 512, 1, 1, 4096, 16384, 1, 1, None]
+printing entry
+['FeedForward_2', 512, 512, 1, 1, 4096, 16384, 1, 1, None]
+printing entry
+['FeedForward_3', 512, 512, 1, 1, 4096, 16384, 1, 1, None]
+printing entry
+['FeedForward_4', 512, 512, 1, 1, 4096, 16384, 1, 1, None]
+printing entry
+['FeedForward_5', 512, 512, 1, 1, 4096, 16384, 1, 1, None]
+printing entry
+['FeedForward_6', 512, 512, 1, 1, 4096, 16384, 1, 1, None]
+printing entry
+['FeedForward_7', 512, 512, 1, 1, 4096, 16384, 1, 1, None]
+printing entry
+['FeedForward_8', 512, 512, 1, 1, 4096, 16384, 1, 1, None]
+printing entry
+['FeedForward_9', 512, 512, 1, 1, 4096, 16384, 1, 1, None]
+printing entry
+['FeedForward_10', 512, 512, 1, 1, 4096, 16384, 1, 1, None]
+printing entry
+['FeedForward_11', 512, 512, 1, 1, 4096, 16384, 1, 1, None]
+printing entry
+['FeedForward_12', 512, 512, 1, 1, 4096, 16384, 1, 1, None]
+printing entry
+['FeedForward_13', 512, 512, 1, 1, 4096, 16384, 1, 1, None]
+printing entry
+['FeedForward_14', 512, 512, 1, 1, 4096, 16384, 1, 1, None]
+printing entry
+['FeedForward_15', 512, 512, 1, 1, 4096, 16384, 1, 1, None]
+printing entry
+['FeedForward_16', 512, 512, 1, 1, 4096, 16384, 1, 1, None]
+printing entry
+['FeedForward_17', 512, 512, 1, 1, 4096, 16384, 1, 1, None]
+printing entry
+['FeedForward_18', 512, 512, 1, 1, 4096, 16384, 1, 1, None]
+printing entry
+['FeedForward_19', 512, 512, 1, 1, 4096, 16384, 1, 1, None]
+printing entry
+['FeedForward_20', 512, 512, 1, 1, 4096, 16384, 1, 1, None]
+printing entry
+['FeedForward_21', 512, 512, 1, 1, 4096, 16384, 1, 1, None]
+printing entry
+['FeedForward_22', 512, 512, 1, 1, 4096, 16384, 1, 1, None]
+printing entry
+['FeedForward_23', 512, 512, 1, 1, 4096, 16384, 1, 1, None]
+printing entry
+['FeedForward_24', 512, 512, 1, 1, 4096, 16384, 1, 1, None]
+printing entry
+['LayerNorm', 512, 512, 1, 1, 4096, 4096, 1, 1, None]
+printing entry
+['FinalLayerNorm', 512, 512, 1, 1, 4096, 4096, 1, 1, None]
+====================================================
+******************* SCALE SIM **********************
+====================================================
+Array Size: 	4x4
+SRAM IFMAP (kB): 	512
+SRAM Filter (kB): 	512
+SRAM OFMAP (kB): 	1024
+Dataflow: 	Weight Stationary
+CSV file path: 	topologies/llama/llama3b.csv
+Bandwidth: 	50
+Working in USE USER BANDWIDTH mode.
+====================================================
