@@ -1,6 +1,0 @@
-> d:\virtualenvs\gra-main\scale-sim-v2\scalesim\scale.py(30)<module>()
--> args = parser.parse_args()
-(Pdb) --KeyboardInterrupt--
-(Pdb) --KeyboardInterrupt--
-(Pdb) --KeyboardInterrupt--
-(Pdb) 

@@ -28,7 +28,7 @@ class topologies(object):
         self.topo_calc_hyper_param_flag = False
         self.layers_calculated_hyperparams = []
 
-    # Redundant function
+    #
     def load_layer_params_from_list(self, layer_name, elems_list=[]):
         self.topo_file_name = ''
         self.current_toponame = ''
@@ -59,9 +59,6 @@ class topologies(object):
         first = True
 
         for row in f:
-            # DEBUG
-            print("row in load_array_gemm")
-            print(row)
             row = row.strip()
             if first:
                 first = False
@@ -81,9 +78,6 @@ class topologies(object):
                 #entries are later iterated from index 1. Index 0 is used to store layer name in convolution mode. So, to rectify assignment of M, N and K in GEMM mode, layer name has been added at index 0 of entries. 
                 self.append_topo_arrays(layer_name=layer_name, elems=entries, sparsity_dir=sparsity_dir)
 
-        #DEBUG
-        print("topo arrays after append_topo_arrays")
-        print(self.topo_arrays)
         self.num_layers = len(self.topo_arrays)
         self.topo_load_flag = True
 
@@ -170,7 +164,6 @@ class topologies(object):
                 entry.append(val)  # Add the same stride in the col direction automatically
         
         # Reading sparsity bitmap file
-        # file_path = f'sparsesim\layers\{layer_name}.txt'
         if sparsity_dir != "":
             file_path = os.path.join(sparsity_dir, f'{layer_name}.txt')
             with open(file_path, 'r') as file:
@@ -180,10 +173,6 @@ class topologies(object):
             entry.append(np.array(sparse_array))
         else:
             entry.append(None)
-
-
-        print("printing entry")
-        print(entry)
 
         # ISSUE #9 Fix
         assert entry[3] <= entry[1], 'Filter height cannot be larger than IFMAP height'

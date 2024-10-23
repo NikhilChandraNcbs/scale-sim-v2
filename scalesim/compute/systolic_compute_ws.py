@@ -65,8 +65,6 @@ class systolic_compute_ws:
         ifmap_col = self.ifmap_op_mat.shape[1]
         filter_row= self.filter_op_mat.shape[0]
 
-        # print("ifmap_col", ifmap_col, "filter_row", filter_row)
-
         assert ifmap_col == filter_row, "Dimension mismatch between operands"
 
         self.Sr = self.ifmap_op_mat.shape[1]
@@ -144,11 +142,6 @@ class systolic_compute_ws:
     def create_filter_prefetch_mat(self):
         assert self.params_set_flag, 'Parameters are not set'
 
-        # DEBUG
-        print("filter matrix in create_filter_prefetch_mat")
-        print(self.filter_op_mat)
-        print("End")
-
         for fc in range(self.col_fold):
             col_start_id = fc * self.arr_col
             col_end_id = min(col_start_id + self.arr_col, self.Sc)
@@ -166,8 +159,6 @@ class systolic_compute_ws:
             else:
                 self.filter_prefetch_matrix = np.concatenate((self.filter_prefetch_matrix, this_fold_prefetch), axis=0)
 
-        print("printing self.filter_prefetch_matrix is ws.py")
-        print(self.filter_prefetch_matrix)
         # Note: ISSUE #15: no skewing happens in the Filter for WS so this issue does not apply.
 
     #
@@ -177,10 +168,6 @@ class systolic_compute_ws:
         self.create_ifmap_demand_mat()
         self.create_filter_demand_mat()
         self.create_ofmap_demand_mat()
-
-        # print("IFMAP: ", self.ifmap_demand_matrix.shape[0], "x", self.ifmap_demand_matrix.shape[1])
-        # print("Filter: ", self.filter_demand_matrix.shape[0], "x", self.filter_demand_matrix.shape[1])
-        # print("OFMAP: ", self.ofmap_demand_matrix.shape[0], "x", self.ofmap_demand_matrix.shape[1])
 
         assert self.ifmap_demand_matrix.shape[0] == self.filter_demand_matrix.shape[0], 'IFMAP and Filter demands out of sync'
         assert self.ofmap_demand_matrix.shape[0] == self.filter_demand_matrix.shape[0], 'OFMAP and Filter demands out of sync'
@@ -220,16 +207,12 @@ class systolic_compute_ws:
                 # Indexing the cols with row start and row end idx are correct
                 # See the comment on ifmap_prefetch generation
                 this_fold_demand = self.ifmap_op_mat[:,col_start_id: col_end_idx]
-                # print("<<<<<<<<<<<<<<<<<<this_fold_demand>>>>>>>>>>>>>>>>>>>>>>>")
-                # with np.printoptions(threshold=np.inf, linewidth=120):
-                #     print(this_fold_demand)
                 
                 if self.config.sparsity_support:
                     # A single block of input is shared among M/N rows, hence a row needs to be read M/N times (assume absence of any broadcast)
                     self.ifmap_reads += this_fold_demand.shape[0] * this_fold_demand.shape[1] * (self.config.sparsity_M / self.config.sparsity_N)
                 else:
                     self.ifmap_reads += this_fold_demand.shape[0] * this_fold_demand.shape[1]
-                print(self.ifmap_reads)
 
                 # Take into account under utilization
                 if delta > 0:
@@ -245,14 +228,8 @@ class systolic_compute_ws:
                 # Add skew to the IFMAP demand matrix to reflect systolic pipeline fill
                 this_fold_demand = skew_matrix(this_fold_demand)
 
-                # with np.printoptions(threshold=np.inf, linewidth=120):
-                #     print(this_fold_demand)
-
                 ifmap_demand_matrix_list.append(this_fold_demand)
-                #if fr == 0 and fc == 0:
-                #    self.ifmap_demand_matrix = this_fold_demand
-                #else:
-                #    self.ifmap_demand_matrix = np.concatenate((self.ifmap_demand_matrix, this_fold_demand), axis=0)
+
         self.ifmap_demand_matrix = np.concatenate(ifmap_demand_matrix_list)
 
         if False:
@@ -277,8 +254,6 @@ class systolic_compute_ws:
                     metadata_conversion_mat = np.ones((1, self.arr_col)) * -1
                 elif self.config.sparsity_representation == 'ellpack_block':
                     metadata_conversion_mat = np.ones((0, self.arr_col)) * -1
-        # print("inter_fold_gap_suffix_mat")
-        # print(inter_fold_gap_suffix_mat)
 
         filter_demand_matrix_list = []
         for fc in range(self.col_fold):
@@ -338,8 +313,7 @@ class systolic_compute_ws:
         if False:
             if self.config.sparsity_support == True:
                 self.filter_demand_matrix = np.concatenate((metadata_conversion_mat, self.filter_demand_matrix), axis=0)
-        print("printing self.filter_demand_matrix in ws.py")
-        print(self.filter_demand_matrix)
+
         # No skew needed in filters for weight stationary
 
     #

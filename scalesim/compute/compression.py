@@ -52,54 +52,6 @@ class compression:
 
         return original_storage, new_storage, metadata_storage
 
-    def csr_to_blocked_ellpack_indices(self, indices, indptr, max_cols):
-        num_rows = len(indptr) - 1
-        ellpack_indices = np.zeros((num_rows, max_cols), dtype=int) - 1
-        latency = 1
-
-        for i in range(num_rows):
-            row_start = indptr[i]
-            row_end = indptr[i + 1]
-            row_indices = indices[row_start:row_end]
-
-            for j in range(min(len(row_indices), max_cols)):
-                ellpack_indices[i, row_indices[j]] = row_indices[j] % 4
-
-        return ellpack_indices, latency
-
-    def csc_to_blocked_ellpack_indices(self, indices, indptr, max_rows):
-        num_cols = len(indptr) - 1
-        ellpack_indices = np.zeros((max_rows, num_cols), dtype=int) - 1
-        latency = 1
-
-        for j in range(num_cols):
-            col_start = indptr[j]
-            col_end = indptr[j + 1]
-            col_indices = indices[col_start:col_end]
-
-            for i in range(min(len(col_indices), max_rows)):
-                ellpack_indices[col_indices[i], j] = col_indices[i] % 4
-
-        return ellpack_indices, latency
-
-    def sparse_to_blocked_ellpack_indices(self, sparse_matrix, max_elements_per_row):
-        num_rows, num_cols = sparse_matrix.shape
-        latency = 0
-
-        ellpack_indices = -np.ones((num_rows, max_elements_per_row), dtype=int)
-
-        for i in range(num_rows):
-            row_indices = []
-
-            for j in range(num_cols):
-                if sparse_matrix[i, j] != 0:
-                    row_indices.append(j)
-
-            row_indices = row_indices[:max_elements_per_row]
-            ellpack_indices[i, row_indices] = row_indices 
-
-        return ellpack_indices, latency
-
     def get_csr_storage(self, matrix):
         data, col_id, row_ptr, original_storage, new_storage, metadata_storage = self.compress_to_csr(matrix)
         return original_storage, new_storage, metadata_storage
@@ -111,18 +63,4 @@ class compression:
     def get_ellpack_block_storage(self, matrix, filter_op_mat, sparsity_M):
         original_storage, new_storage, metadata_storage = self.compress_to_ellpack_block(matrix, filter_op_mat, sparsity_M)
         return original_storage, new_storage, metadata_storage
-
-    def get_csr_extra_cycles(self, matrix):
-        data, _id, _ptr, original_storage, new_storage = self.compress_to_csr(matrix)
-        ellpack_mat, delay = self.csr_to_blocked_ellpack_indices(_id, _ptr, matrix.shape[1])
-        return ellpack_mat, delay
-
-    def get_csc_extra_cycles(self, matrix):
-        data, _id, _ptr, original_storage, new_storage = self.compress_to_csc(matrix)
-        ellpack_mat, delay = self.csc_to_blocked_ellpack_indices(_id, _ptr, matrix.shape[0])
-        return ellpack_mat, delay
-
-    def get_ellpack_block_extra_cycles(self, matrix):
-        ellpack_mat, delay = self.sparse_to_blocked_ellpack_indices(matrix, matrix.shape[1])
-        return ellpack_mat, delay
     

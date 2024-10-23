@@ -30,13 +30,6 @@ class scale_config:
         self.sparsity_M = 4
         self.sparsity_optimized_mapping = False
 
-        # # The default values correspond to VEGETA-D-1-1 design with 512 MACs
-        # self.vegeta_alpha = 1
-        # self.vegeta_beta = 1
-        # self.vegeta_total_macs = 512
-        # self.vegeta_rows = 32
-        # self.vegeta_cols = 16
-
     #
     def read_conf_file(self, conf_file_in):
 
@@ -97,16 +90,6 @@ class scale_config:
                 self.sparsity_optimized_mapping = True
             else:
                 self.sparsity_optimized_mapping = False
-
-        # section = 'vegeta'
-        # self.vegeta_alpha = int(config.get(section, 'Alpha'))
-        # self.vegeta_beta = int(config.get(section, 'Beta'))
-        # self.vegeta_total_macs = int(config.get(section, 'TotalMACs'))
-        # self.vegeta_rows = 32 / self.vegeta_beta # The number of effectual computations per output element is 32
-        # self.vegeta_cols = self.vegeta_total_macs/(self.vegeta_rows * self.vegeta_alpha * self.vegeta_beta)
-        # # DEBUG
-        # print("alpha, beta, macs, rows, cols")
-        # print(self.vegeta_alpha, "|", self.vegeta_beta, "|", self.vegeta_total_macs, "|", self.vegeta_rows, "|", self.vegeta_cols)
 
         self.valid_conf_flag = True
 
