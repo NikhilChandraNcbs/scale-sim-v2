@@ -20,6 +20,7 @@ DIFF9=$(diff $path/sparsity_outputs/scalesim_sparsity/layer0/OFMAP_DRAM_TRACE.cs
 DIFF10=$(diff $path/sparsity_outputs/scalesim_sparsity/layer0/OFMAP_SRAM_TRACE.csv $path/test/sparsity/golden_trace/layer0/OFMAP_SRAM_TRACE.csv)
 
 
+
 if [ "$DIFF1" != "" ]; then
     echo "Output does not match!" 
     echo "$DIFF1"
