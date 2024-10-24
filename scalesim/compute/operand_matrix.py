@@ -228,15 +228,11 @@ class operand_matrix(object):
         self.filter_addr_matrix = self.calc_filter_elem_addr(row_indices, col_indices)
 
         if self.config.sparsity_support == True:
-            sparse_array = self.topoutil.topo_arrays[self.layer_id][-1]
-            if sparse_array is None:
-                pattern = np.concatenate([np.ones(self.config.sparsity_N, dtype=int), np.zeros(self.config.sparsity_M - self.config.sparsity_N, dtype=int)])
-                num_repeats = (self.filter_addr_matrix.shape[0] + self.config.sparsity_M - 1) // self.config.sparsity_M
-                column_values = np.tile(pattern, num_repeats)[:self.filter_addr_matrix.shape[0]]
-                sparse_array = np.tile(column_values[:, np.newaxis], (1, self.filter_addr_matrix.shape[1]))
-            else:
-                sparse_array = sparse_array.T
-                sparse_array = np.reshape(sparse_array, self.filter_addr_matrix.shape)
+
+            pattern = np.concatenate([np.ones(self.config.sparsity_N, dtype=int), np.zeros(self.config.sparsity_M - self.config.sparsity_N, dtype=int)])
+            num_repeats = (self.filter_addr_matrix.shape[0] + self.config.sparsity_M - 1) // self.config.sparsity_M
+            column_values = np.tile(pattern, num_repeats)[:self.filter_addr_matrix.shape[0]]
+            sparse_array = np.tile(column_values[:, np.newaxis], (1, self.filter_addr_matrix.shape[1]))
 
             self.sparse_filter_array = sparse_array
             self.filter_addr_matrix = np.multiply(self.filter_addr_matrix, sparse_array)

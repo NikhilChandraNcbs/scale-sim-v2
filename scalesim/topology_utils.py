@@ -39,14 +39,14 @@ class topologies(object):
         self.topo_load_flag = True
 
     #
-    def load_arrays(self, topofile='', mnk_inputs=False, sparsity_dir=''):
+    def load_arrays(self, topofile='', mnk_inputs=False):
         if mnk_inputs:
-            self.load_arrays_gemm(topofile, sparsity_dir)
+            self.load_arrays_gemm(topofile)
         else:
-            self.load_arrays_conv(topofile, sparsity_dir)
+            self.load_arrays_conv(topofile)
 
     #
-    def load_arrays_gemm(self, topofile='', sparsity_dir=''):
+    def load_arrays_gemm(self, topofile=''):
 
         self.topo_file_name = topofile.split('/')[-1]
         name_arr = self.topo_file_name.split('.')
@@ -76,13 +76,13 @@ class topologies(object):
                 # Entries: layer name, Ifmap h, ifmap w, filter h, filter w, num_ch, num_filt, stride h, stride w
                 entries = [layer_name, m,       k,       1,        k,        1,      n,        1,        1]
                 #entries are later iterated from index 1. Index 0 is used to store layer name in convolution mode. So, to rectify assignment of M, N and K in GEMM mode, layer name has been added at index 0 of entries. 
-                self.append_topo_arrays(layer_name=layer_name, elems=entries, sparsity_dir=sparsity_dir)
+                self.append_topo_arrays(layer_name=layer_name, elems=entries)
 
         self.num_layers = len(self.topo_arrays)
         self.topo_load_flag = True
 
     # Load the topology data from the file
-    def load_arrays_conv(self, topofile='', sparsity_dir=''):
+    def load_arrays_conv(self, topofile=''):
         first = True
         self.topo_file_name = topofile.split('/')[-1]
         name_arr = self.topo_file_name.split('.')
@@ -102,10 +102,10 @@ class topologies(object):
                     for dp_layer in range(int(elems[5].strip())):
                         layer_name = elems[0].strip() + "Channel_" + str(dp_layer)
                         elems[5] = str(1)
-                        self.append_topo_arrays(layer_name, elems, sparsity_dir)
+                        self.append_topo_arrays(layer_name, elems)
                 else:
                     layer_name = elems[0].strip()
-                    self.append_topo_arrays(layer_name, elems, sparsity_dir)
+                    self.append_topo_arrays(layer_name, elems)
 
         self.num_layers = len(self.topo_arrays)
         self.topo_load_flag = True
@@ -154,7 +154,7 @@ class topologies(object):
         f.close()
 
     # LEGACY
-    def append_topo_arrays(self, layer_name, elems, sparsity_dir):
+    def append_topo_arrays(self, layer_name, elems):
         entry = [layer_name]
 
         for i in range(1, len(elems)):
@@ -162,17 +162,6 @@ class topologies(object):
             entry.append(val)
             if i == 7 and len(elems) < 9:
                 entry.append(val)  # Add the same stride in the col direction automatically
-        
-        # Reading sparsity bitmap file
-        if sparsity_dir != "":
-            file_path = os.path.join(sparsity_dir, f'{layer_name}.txt')
-            with open(file_path, 'r') as file:
-                content = file.read()
-                sparse_array = ast.literal_eval(content)
-
-            entry.append(np.array(sparse_array))
-        else:
-            entry.append(None)
 
         # ISSUE #9 Fix
         assert entry[3] <= entry[1], 'Filter height cannot be larger than IFMAP height'
@@ -346,8 +335,7 @@ class topologies(object):
             self.topo_calc_hyperparams()
         layer_calc_params = self.layers_calculated_hyperparams[layer_id]
         num_filters = self.get_layer_num_filters(layer_id)
-        num_ofmap_px = layer_calc_params[0] * layer_calc_params[1] * num_filters 
-        print("layer_calc_params[0] * layer_calc_params[1] * num_filters = ", layer_calc_params[0], layer_calc_params[1], num_filters )
+        num_ofmap_px = layer_calc_params[0] * layer_calc_params[1] * num_filters
         return num_ofmap_px
 
     def get_layer_ofmap_dims(self, layer_id=0):
