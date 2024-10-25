@@ -8,12 +8,17 @@ from scalesim.memory.read_port import read_port
 
 
 class read_buffer:
+    """
+    Class which runs the memory simulation of double buffered ifmap/filter SRAM. The double
+    buffering helps to hide the DRAM latency when the SRAM is servicing requests from the systolic
+    array using one of the buffers while the other buffer prefetches from the DRAM.
+    """
     def __init__(self):
         # Buffer properties: User specified
         self.total_size_bytes = 128
-        self.word_size = 1                      # Bytes
+        self.word_size = 1    # Bytes
         self.active_buf_frac = 0.9
-        self.hit_latency = 1                    # Cycles after which a request is served if already in the buffer
+        self.hit_latency = 1  # Cycles after which a request is served if already in the buffer
 
         # Buffer properties: Calculated
         self.total_size_elems = math.floor(self.total_size_bytes / self.word_size)
@@ -130,7 +135,8 @@ class read_buffer:
 
             self.fetch_matrix[dest_row][dest_col] = fetch_matrix_np[src_row][src_col]
 
-        # Once the fetch matrices are set, populate the data structure for fast lookups and servicing
+        # Once the fetch matrices are set, populate the data structure for faster lookups and
+        # servicing
         self.prepare_hashed_buffer()
 
     #
@@ -205,8 +211,9 @@ class read_buffer:
         return False
 
     #
-    def service_reads(self, incoming_requests_arr_np,   # 2D array with the requests
-                            incoming_cycles_arr):       # 1D vector with the cycles at which req arrived
+    def service_reads(self,
+                      incoming_requests_arr_np,   # 2D array with the requests
+                      incoming_cycles_arr):       # 1D vector with the cycles at which req arrived
         # Service the incoming read requests
         # returns a cycles array corresponding to the requests buffer
         # Logic: Always check if an addr is in active buffer.
@@ -216,8 +223,9 @@ class read_buffer:
 
         if not self.active_buf_full_flag:
             start_cycle = incoming_cycles_arr[0][0]
-            self.prefetch_active_buffer(start_cycle=start_cycle)    # Needs to use the entire operand matrix
-                                                                    # keeping in mind the tile order and everything
+            # Needs to use the entire operand matrix
+            # keeping in mind the tile order and everything
+            self.prefetch_active_buffer(start_cycle=start_cycle)
 
         out_cycles_arr = []
         offset = self.hit_latency
@@ -234,14 +242,15 @@ class read_buffer:
 
                 # if addr not in self.active_buffer_contents: #this is super slow!!!
                 # Fixing for ISSUE #14
-                # if not self.active_buffer_hit(addr):  # --> While loop ensures multiple prefetches if needed
+                # if not self.active_buffer_hit(addr):  # --> While loop ensures multiple prefetches
+                #                                             if needed
                 while not self.active_buffer_hit(addr):
                     self.new_prefetch()
                     potential_stall_cycles = self.last_prefect_cycle - (cycle + offset)
-                    offset += potential_stall_cycles        # Offset increments if there were potential stalls
+                    # Offset increments if there were potential stalls
+                    offset += potential_stall_cycles
                     if potential_stall_cycles > 0:
                         offset += potential_stall_cycles
-                   
 
             out_cycles = cycle + offset
             out_cycles_arr.append(out_cycles)
@@ -280,14 +289,17 @@ class read_buffer:
         # TODO: Tally and check if this agrees with the contents of the hashed buffer
 
         # 2. Preparing the cycles array
-        #    The start_cycle variable ensures that all the requests have been made before any incoming reads came
+        #    The start_cycle variable ensures that all the requests have been made before any
+        #    incoming reads came
         cycles_arr = np.zeros((num_lines, 1))
         for i in range(cycles_arr.shape[0]):
-            cycles_arr[i][0] = -1 * (num_lines - start_cycle - (i - self.backing_buffer.get_latency()))
+            cycles_arr[i][0] = \
+                -1 * (num_lines - start_cycle - (i - self.backing_buffer.get_latency()))
 
         # 3. Send the request and get the response cycles count
-        response_cycles_arr = self.backing_buffer.service_reads(incoming_cycles_arr=cycles_arr,
-                                                                incoming_requests_arr_np=prefetch_requests)
+        response_cycles_arr = \
+            self.backing_buffer.service_reads(incoming_cycles_arr=cycles_arr,
+                                              incoming_requests_arr_np=prefetch_requests)
 
         # 4. Update the variables
         self.last_prefect_cycle = int(response_cycles_arr[-1][0])
@@ -309,14 +321,16 @@ class read_buffer:
 
         # Set the line to be prefetched next
         # The module operator is to ensure that the indices wrap around
-        if requested_data_size > self.active_buf_size:  # Some elements in the current idx is left out in this case
+        if requested_data_size > self.active_buf_size:
+            # Some elements in the current idx is left out in this case
             self.next_line_prefetch_idx = num_lines % self.fetch_matrix.shape[0]
         else:
             self.next_line_prefetch_idx = (num_lines + 1) % self.fetch_matrix.shape[0]
 
     #
     def new_prefetch(self):
-        # In a new prefetch, some portion of the original data needs to be deleted to accomodate the prefetched data
+        # In a new prefetch, some portion of the original data needs to be deleted to accomodate the
+        # prefetched data.
         # In this case we overwrite some data in the active buffer with the prefetched data
         # And then create a new prefetch request
         # Also return when the prefetched data was made available
@@ -345,8 +359,9 @@ class read_buffer:
             last_idx = self.fetch_matrix.shape[0]
             prefetch_requests = self.fetch_matrix[start_idx:,:]
 
-            new_end_idx = min(end_idx - last_idx, start_idx)    # In case the entire array is engulfed
-            prefetch_requests = np.concatenate((prefetch_requests, self.fetch_matrix[:new_end_idx,:]))
+            new_end_idx = min(end_idx - last_idx, start_idx) # In case the entire array is engulfed
+            prefetch_requests = \
+                np.concatenate((prefetch_requests, self.fetch_matrix[:new_end_idx,:]))
         else:
             prefetch_requests = self.fetch_matrix[start_idx:end_idx, :]
 
@@ -370,13 +385,15 @@ class read_buffer:
             cycles_arr[i][0] = self.last_prefect_cycle + i + 1
 
         # 4. Send the request
-        response_cycles_arr = self.backing_buffer.service_reads(incoming_cycles_arr=cycles_arr,
-                                                                incoming_requests_arr_np=prefetch_requests)
+        response_cycles_arr = \
+            self.backing_buffer.service_reads(incoming_cycles_arr=cycles_arr,
+                                              incoming_requests_arr_np=prefetch_requests)
 
         # 5. Update the variables
         self.last_prefect_cycle = response_cycles_arr[-1][0]
 
-        assert response_cycles_arr.shape == cycles_arr.shape, 'The request and response cycles dims do not match'
+        assert response_cycles_arr.shape == cycles_arr.shape, \
+               'The request and response cycles dims do not match'
 
         this_prefetch_trace = np.concatenate((response_cycles_arr, prefetch_requests), axis=1)
         self.trace_matrix = np.concatenate((self.trace_matrix, this_prefetch_trace), axis=0)

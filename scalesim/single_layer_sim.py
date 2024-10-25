@@ -12,6 +12,9 @@ from scalesim.compute.systolic_compute_is import systolic_compute_is
 from scalesim.memory.double_buffered_scratchpad_mem import double_buffered_scratchpad as mem_dbsp
 
 class single_layer_sim:
+    """
+    Class which runs the simulation for a single layer and generates report data
+    """
     def __init__(self):
         self.layer_id = 0
         self.topo = topo()
@@ -114,18 +117,23 @@ class single_layer_sim:
         self.memory_system_ready_flag = True
 
     # Filter Metadata Calculation
-    def calculate_metadata_reads(self, filter_op_mat):        
+    def calculate_metadata_reads(self, filter_op_mat):
         if self.config.sparsity_support == True:
             sparse_array_np = self.op_mat_obj.sparse_filter_array
             original_storage = 0
             new_storage = 0
 
             if self.config.sparsity_representation == 'csr':
-                original_storage, new_storage, metadata_storage = self.compression.get_csr_storage(sparse_array_np)
+                original_storage, new_storage, metadata_storage = \
+                                                self.compression.get_csr_storage(sparse_array_np)
             elif self.config.sparsity_representation == 'csc':
-                original_storage, new_storage, metadata_storage = self.compression.get_csc_storage(sparse_array_np)
+                original_storage, new_storage, metadata_storage = \
+                                                self.compression.get_csc_storage(sparse_array_np)
             elif self.config.sparsity_representation == 'ellpack_block':
-                original_storage, new_storage, metadata_storage = self.compression.get_ellpack_block_storage(sparse_array_np, filter_op_mat, self.config.sparsity_M)
+                original_storage, new_storage, metadata_storage = \
+                                self.compression.get_ellpack_block_storage(sparse_array_np,
+                                                                           filter_op_mat,
+                                                                           self.config.sparsity_M)
 
             self.original_filter_size += original_storage
             self.new_filter_size += new_storage
@@ -143,7 +151,7 @@ class single_layer_sim:
         _, ofmap_op_mat = self.op_mat_obj.get_ofmap_matrix()
 
         # 1.2 Get the metadata for the filter matrix
-        self.calculate_metadata_reads(filter_op_mat)     
+        self.calculate_metadata_reads(filter_op_mat)
         self.num_compute = self.topo.get_layer_num_ofmap_px(self.layer_id) \
                            * self.topo.get_layer_window_size(self.layer_id)
 
@@ -155,9 +163,11 @@ class single_layer_sim:
 
         # 1.4 Get the no compute demand matrices from for 2 operands and the output
         ifmap_prefetch_mat, filter_prefetch_mat = self.compute_system.get_prefetch_matrices()
-        ifmap_demand_mat, filter_demand_mat, ofmap_demand_mat = self.compute_system.get_demand_matrices()
+        ifmap_demand_mat, filter_demand_mat, ofmap_demand_mat = \
+                                                    self.compute_system.get_demand_matrices()
 
-        # 2. Setup the memory system and run the demands through it to find any memory bottleneck and generate traces
+        # 2. Setup the memory system and run the demands through it to find any memory bottleneck
+        #    and generate traces
 
         # 2.1 Setup the memory system if it was not setup externally
         if not self.memory_system_ready_flag:
@@ -204,9 +214,13 @@ class single_layer_sim:
 
         # 2.2 Install the prefetch matrices to the read buffers to finish setup
         if self.config.use_user_dram_bandwidth() :
-            self.memory_system.set_read_buf_prefetch_matrices(ifmap_prefetch_mat=ifmap_prefetch_mat,
-                                                              filter_prefetch_mat=filter_prefetch_mat)
-        self.memory_system.service_memory_requests(ifmap_demand_mat, filter_demand_mat, ofmap_demand_mat)
+            self.memory_system.set_read_buf_prefetch_matrices(
+                                                        ifmap_prefetch_mat=ifmap_prefetch_mat,
+                                                        filter_prefetch_mat=filter_prefetch_mat
+                                                             )
+        self.memory_system.service_memory_requests(ifmap_demand_mat,
+                                                    filter_demand_mat,
+                                                    ofmap_demand_mat)
 
         self.runs_ready = True
 
@@ -276,9 +290,12 @@ class single_layer_sim:
             = self.memory_system.get_ofmap_dram_details()
 
         # BW calc for DRAM access
-        self.avg_ifmap_dram_bw = self.ifmap_dram_reads / (self.ifmap_dram_stop_cycle - self.ifmap_dram_start_cycle + 1)
-        self.avg_filter_dram_bw = self.filter_dram_reads / (self.filter_dram_stop_cycle - self.filter_dram_start_cycle + 1)
-        self.avg_ofmap_dram_bw = self.ofmap_dram_writes / (self.ofmap_dram_stop_cycle - self.ofmap_dram_start_cycle + 1)
+        self.avg_ifmap_dram_bw = self.ifmap_dram_reads / \
+                                (self.ifmap_dram_stop_cycle - self.ifmap_dram_start_cycle + 1)
+        self.avg_filter_dram_bw = self.filter_dram_reads / \
+                                (self.filter_dram_stop_cycle - self.filter_dram_start_cycle + 1)
+        self.avg_ofmap_dram_bw = self.ofmap_dram_writes / \
+                                (self.ofmap_dram_stop_cycle - self.ofmap_dram_start_cycle + 1)
 
         self.report_items_ready = True
 
@@ -292,7 +309,11 @@ class single_layer_sim:
         if not self.report_items_ready:
             self.calc_report_data()
 
-        items = [self.total_cycles, self.stall_cycles, self.overall_util, self.mapping_eff, self.compute_util]
+        items = [self.total_cycles,
+                 self.stall_cycles,
+                 self.overall_util,
+                 self.mapping_eff,
+                 self.compute_util]
         return items
 
     #
@@ -302,7 +323,10 @@ class single_layer_sim:
 
 
         if self.config.sparsity_support == True:
-            items = [self.avg_ifmap_sram_bw, self.avg_filter_sram_bw, self.avg_filter_metadata_sram_bw, self.avg_ofmap_sram_bw]
+            items = [self.avg_ifmap_sram_bw,
+                     self.avg_filter_sram_bw,
+                     self.avg_filter_metadata_sram_bw,
+                     self.avg_ofmap_sram_bw]
         else:
             items = [self.avg_ifmap_sram_bw, self.avg_filter_sram_bw, self.avg_ofmap_sram_bw]
         items += [self.avg_ifmap_dram_bw, self.avg_filter_dram_bw, self.avg_ofmap_dram_bw]

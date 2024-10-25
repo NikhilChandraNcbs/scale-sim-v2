@@ -4,6 +4,9 @@ import sys
 
 
 class scale_config:
+    """
+    Class that handles the SCALE-Sim configuration files.
+    """
     def __init__(self):
         self.run_name = "scale_run"
         # Anand: ISSUE #2. Patch
@@ -76,7 +79,7 @@ class scale_config:
             self.topofile = config.get(section, 'TopologyCsvLoc').split('"')[1]
 
         # Sparsity
-        section = 'sparsity'        
+        section = 'sparsity'
         if config.get(section, 'SparsitySupport').lower() == 'true':
             self.sparsity_support = True
         else:
@@ -230,7 +233,7 @@ class scale_config:
 
         out_list.append(str(self.df))
         out_list.append(str(self.topofile))
-       
+
         return out_list
 
     def get_run_name(self):

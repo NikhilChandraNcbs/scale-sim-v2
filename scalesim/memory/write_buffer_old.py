@@ -8,6 +8,9 @@ from scalesim.memory.write_port import write_port
 
 class write_buffer:
     def __init__(self):
+        """
+        Class which runs the memory simulation of the OFMAP SRAM.
+        """
         # Buffer properties: User specified
         self.total_size_bytes = 128
         self.word_size = 1
@@ -88,7 +91,8 @@ class write_buffer:
 
     #
     def service_writes(self, incoming_requests_arr_np, incoming_cycles_arr_np):
-        assert incoming_cycles_arr_np.shape[0] == incoming_requests_arr_np.shape[0], 'Cycles and requests do not match'
+        assert incoming_cycles_arr_np.shape[0] == incoming_requests_arr_np.shape[0], \
+               'Cycles and requests do not match'
         out_cycles_arr = []
 
         offset = 0

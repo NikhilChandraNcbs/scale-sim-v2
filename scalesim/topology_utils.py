@@ -5,7 +5,11 @@ import os
 
 
 class topologies(object):
-
+    """
+    Class which contains the methods to preprocess the data from topology file (.csv format) before
+    doing compute simulation.
+    """
+    #
     def __init__(self):
         self.current_topo_name = ""
         self.topo_file_name = ""
@@ -73,9 +77,12 @@ class topologies(object):
                 n = elems[2].strip()
                 k = elems[3].strip()
 
-                # Entries: layer name, Ifmap h, ifmap w, filter h, filter w, num_ch, num_filt, stride h, stride w
-                entries = [layer_name, m,       k,       1,        k,        1,      n,        1,        1]
-                #entries are later iterated from index 1. Index 0 is used to store layer name in convolution mode. So, to rectify assignment of M, N and K in GEMM mode, layer name has been added at index 0 of entries. 
+                # Entries: layer name, Ifmap h, ifmap w, filter h, filter w, num_ch, num_filt,
+                #          stride h, stride w
+                entries = [layer_name, m, k, 1, k, 1, n, 1, 1]
+                # entries are later iterated from index 1. Index 0 is used to store layer name in
+                # convolution mode. So, to rectify assignment of M, N and K in GEMM mode, layer name
+                # has been added at index 0 of entries.
                 self.append_topo_arrays(layer_name=layer_name, elems=entries)
 
         self.num_layers = len(self.topo_arrays)
@@ -117,7 +124,7 @@ class topologies(object):
                       ):
         if path == "":
             print("WARNING: topology_utils.write_topo_file: No path specified writing to the cwd")
-            path = "./" 
+            path = "./"
 
         if filename == "":
             print("ERROR: topology_utils.write_topo_file: No filename provided")
@@ -179,7 +186,7 @@ class topologies(object):
             val = int(str(layer_entry_list[i]).strip())
             entry.append(val)
             if i == 7 and len(layer_entry_list) < 9:
-                entry.append(val)           # Add the same stride in the col direction automatically
+                entry.append(val)  # Add the same stride in the col direction automatically
 
         self.append_layer_entry(entry,toponame=self.current_topo_name)
 
@@ -217,6 +224,7 @@ class topologies(object):
             self.layers_calculated_hyperparams.append(entry)
         self.topo_calc_hyper_param_flag = True
 
+    #
     def calc_spatio_temporal_params(self, df='os', layer_id=0):
         s_row = -1
         s_col = -1
@@ -242,6 +250,7 @@ class topologies(object):
             self.topo_calc_hyperparams(self.topo_file_name)
         return s_row, s_col, t_time
 
+    #
     def set_spatio_temporal_params(self):
         if not self.topo_calc_hyper_param_flag:
             self.topo_calc_hyperparams(self.topo_file_name)
@@ -253,6 +262,7 @@ class topologies(object):
             self.spatio_temp_dim_arrays.append(this_layer_params_arr)
         self.topo_calc_spatiotemp_params_flag = True
 
+    #
     def get_transformed_mnk_dimensions(self):
         if not self.topo_calc_hyper_param_flag:
             self.topo_calc_hyperparams(self.topo_file_name)
@@ -267,7 +277,7 @@ class topologies(object):
 
         return mnk_dims_arr
 
-
+    #
     def get_current_topo_name(self):
         current_topo_name = ""
         if self.topo_load_flag:
@@ -276,6 +286,7 @@ class topologies(object):
             print('Error: get_current_topo_name(): Topo file not read')
         return current_topo_name
 
+    #
     def get_num_layers(self):
         if not self.topo_load_flag:
             print("ERROR: topologies.get_num_layers: No array loaded")
@@ -305,6 +316,7 @@ class topologies(object):
         layer_params = self.topo_arrays[layer_id]
         return layer_params[6]
 
+    #
     def get_layer_num_channels(self, layer_id=0):
         if not (self.topo_load_flag or self.num_layers - 1 < layer_id):
             print("ERROR: topologies.get_layer_num_filter: Invalid layer id")
@@ -319,7 +331,7 @@ class topologies(object):
         layer_params = self.topo_arrays[layer_id]
         return layer_params[7:9]
 
-
+    #
     def get_layer_window_size(self, layer_id=0):
         if not (self.topo_load_flag or self.num_layers - 1 < layer_id):
             print("ERROR: topologies.get_layer_num_filter: Invalid layer id")
@@ -328,6 +340,7 @@ class topologies(object):
         layer_calc_params = self.layers_calculated_hyperparams[layer_id]
         return layer_calc_params[3]
 
+    #
     def get_layer_num_ofmap_px(self, layer_id=0):
         if not (self.topo_load_flag or self.num_layers - 1 < layer_id):
             print("ERROR: topologies.get_layer_num_filter: Invalid layer id")
@@ -338,6 +351,7 @@ class topologies(object):
         num_ofmap_px = layer_calc_params[0] * layer_calc_params[1] * num_filters
         return num_ofmap_px
 
+    #
     def get_layer_ofmap_dims(self, layer_id=0):
         if not (self.topo_load_flag or self.num_layers - 1 < layer_id):
             print("ERROR: topologies.get_layer_ofmap_dims: Invalid layer id")
@@ -346,6 +360,7 @@ class topologies(object):
         ofmap_dims = self.layers_calculated_hyperparams[layer_id][0:2]
         return ofmap_dims
 
+    #
     def get_layer_params(self, layer_id=0):
         if not (self.topo_load_flag or self.num_layers - 1 < layer_id):
             print("ERROR: topologies.get_layer_params: Invalid layer id")
@@ -353,6 +368,7 @@ class topologies(object):
         layer_params = self.topo_arrays[layer_id]
         return layer_params
 
+    #
     def get_layer_id_from_name(self, layer_name=""):
         if (not self.topo_load_flag) or layer_name == "":
             print("ERROR")
@@ -385,6 +401,7 @@ class topologies(object):
             layer_names.append(layer_name)
         return layer_names
 
+    #
     def get_layer_mac_ops(self, layer_id=0):
         if not self.topo_calc_hyper_param_flag:
             self.topo_calc_hyperparams(topofilename=self.topo_file_name)
@@ -392,6 +409,7 @@ class topologies(object):
         mac_ops = layer_hyper_param[2]
         return mac_ops
 
+    #
     def get_all_mac_ops(self):
         if not self.topo_calc_hyper_param_flag:
             self.topo_calc_hyperparams(topofilename=self.topo_file_name)

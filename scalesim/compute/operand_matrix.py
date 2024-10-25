@@ -228,7 +228,6 @@ class operand_matrix(object):
         self.filter_addr_matrix = self.calc_filter_elem_addr(row_indices, col_indices)
 
         if self.config.sparsity_support == True:
-
             pattern = np.concatenate([np.ones(self.config.sparsity_N, dtype=int), np.zeros(self.config.sparsity_M - self.config.sparsity_N, dtype=int)])
             num_repeats = (self.filter_addr_matrix.shape[0] + self.config.sparsity_M - 1) // self.config.sparsity_M
             column_values = np.tile(pattern, num_repeats)[:self.filter_addr_matrix.shape[0]]

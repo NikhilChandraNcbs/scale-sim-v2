@@ -9,6 +9,9 @@ from scalesim.memory.write_port import write_port
 
 
 class write_buffer:
+    """
+    Class which runs the memory simulation of the OFMAP SRAM.
+    """
     def __init__(self):
         # Buffer properties: User specified
         self.total_size_bytes = 128
@@ -32,7 +35,7 @@ class write_buffer:
         # Helper data structures for faster execution
         self.line_idx = 0
         self.current_line = np.ones((1, 1)) * -1
-        self.max_cache_lines = 2 ** 10              # TODO: This is arbitrary, check if this can be tuned
+        self.max_cache_lines = 2 ** 10  # TODO: This is arbitrary, check if this can be tuned
         self.trace_matrix_cache = np.zeros((1, 1))
 
         # Access counts
@@ -117,7 +120,11 @@ class write_buffer:
                 self.trace_matrix_cache = self.current_line
                 self.trace_matrix_cache_empty = False
             else:
-                self.trace_matrix_cache = np.concatenate((self.trace_matrix_cache, self.current_line), axis=0)
+                self.trace_matrix_cache = np.concatenate((
+                                                          self.trace_matrix_cache,
+                                                          self.current_line
+                                                         ),
+                                                         axis=0)
 
             self.current_line = np.ones((1,1)) * -1
             self.line_idx = 0
@@ -127,14 +134,20 @@ class write_buffer:
 
     #
     def append_to_trace_mat(self, force=False):
-        if force:   # This forces the contents for self.current_line and self.trace_matrix cache to be dumped
+        if force:
+            # This forces the contents for self.current_line and self.trace_matrix
+            # cache to be dumped
             if not self.line_idx == 0:
                 #if self.trace_matrix_cache.shape == (1,1):
                 if self.trace_matrix_cache_empty:
                     self.trace_matrix_cache = self.current_line
                     self.trace_matrix_cache_empty = False
                 else:
-                    self.trace_matrix_cache = np.concatenate((self.trace_matrix_cache, self.current_line), axis=0)
+                    self.trace_matrix_cache = np.concatenate((
+                                                              self.trace_matrix_cache,
+                                                              self.current_line
+                                                             ),
+                                                             axis=0)
 
                 self.current_line = np.ones((1,1)) * -1
                 self.line_idx = 0
@@ -157,7 +170,8 @@ class write_buffer:
 
     #
     def service_writes(self, incoming_requests_arr_np, incoming_cycles_arr_np):
-        assert incoming_cycles_arr_np.shape[0] == incoming_requests_arr_np.shape[0], 'Cycles and requests do not match'
+        assert incoming_cycles_arr_np.shape[0] == incoming_requests_arr_np.shape[0], \
+                                                  'Cycles and requests do not match'
         out_cycles_arr = []
         offset = 0
 
@@ -204,7 +218,8 @@ class write_buffer:
         self.drain_buf_end_line_id = self.drain_buf_start_line_id + lines_to_fill_dbuf
         self.drain_buf_end_line_id = min(self.drain_buf_end_line_id, self.trace_matrix.shape[0])
 
-        requests_arr_np = self.trace_matrix[self.drain_buf_start_line_id: self.drain_buf_end_line_id, :]
+        requests_arr_np = \
+                    self.trace_matrix[self.drain_buf_start_line_id: self.drain_buf_end_line_id, :]
         num_lines = requests_arr_np.shape[0]
 
         data_sz_to_drain = num_lines * requests_arr_np.shape[1]

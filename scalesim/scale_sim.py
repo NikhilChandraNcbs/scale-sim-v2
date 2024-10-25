@@ -5,6 +5,10 @@ from scalesim.simulator import simulator
 
 
 class scalesim:
+    """
+    The top level class for the SCALE-Sim v2 simulator Provides methods for setting parameters,
+    running sims, and generating results
+    """
     def __init__(self,
                  save_disk_space=False,
                  verbose=True,
@@ -49,11 +53,11 @@ class scalesim:
                 self.topology_file = topology_filename
 
         if not os.path.exists(config_filename):
-            print("ERROR: scalesim.scale.py: Config file not found") 
+            print("ERROR: scalesim.scale.py: Config file not found")
             print("Input file:" + config_filename)
             print('Exiting')
             exit()
-        else: 
+        else:
             self.config_file = config_filename
 
         # Parse config first

@@ -5,6 +5,9 @@ from scalesim.memory.read_port import read_port
 
 
 class ReadBufferEstimateBw:
+    """
+    Class which service the estimate bandwidth mode in the read buffer
+    """
     def __init__(self):
         # Buffer parameters
         self.word_size = 1
@@ -91,9 +94,11 @@ class ReadBufferEstimateBw:
     #
     def service_reads(self, incoming_requests_arr_np, incoming_cycles_arr):
         assert self.params_set_flag, 'Parameters are not set yet'
-        assert incoming_cycles_arr.shape[0] == incoming_requests_arr_np.shape[0], 'Incoming cycles and requests dont match'
+        assert incoming_cycles_arr.shape[0] == incoming_requests_arr_np.shape[0],\
+               'Incoming cycles and requests dont match'
 
-        outcycles = incoming_cycles_arr + self.hit_latency  # In estimate mode, operation is stall free.
+        outcycles = incoming_cycles_arr + self.hit_latency
+        # In estimate mode, operation is stall free.
         # Therefore its always a hit
 
         # The following to track requests and maintain proper state of the buffer
@@ -129,16 +134,19 @@ class ReadBufferEstimateBw:
                 self.elems_current_set = 0
                 self.current_set_id += 1
 
-                if self.current_set_id == self.read_buffer_set_end_id + 1:  # This should be prefetched
+                # This should be prefetched
+                if self.current_set_id == self.read_buffer_set_end_id + 1:
                     if not self.active_buffer_prefetch_done:
                         self.prefetch_bandwidth = self.default_bandwidth
-                        self.last_prefetch_end_cycle = self.first_request_rcvd_cycle - 1 - self.backing_buffer.get_latency()
+                        self.last_prefetch_end_cycle = \
+                            self.first_request_rcvd_cycle - 1 - self.backing_buffer.get_latency()
 
                         cycles_needed = (self.num_sets_prefetch_buffer * self.num_items_per_set) \
                                         / self.prefetch_bandwidth
                         cycles_needed = math.ceil(cycles_needed)
 
-                        self.last_prefetch_start_cycle = self.last_prefetch_end_cycle - cycles_needed + 1
+                        self.last_prefetch_start_cycle = \
+                            self.last_prefetch_end_cycle - cycles_needed + 1
 
                         self.prefetch()
                         self.prefetch_buffer_set_start_id =self.read_buffer_set_end_id + 1
@@ -148,13 +156,14 @@ class ReadBufferEstimateBw:
 
                     else:
                         elems_to_prefetch = self.num_sets_prefetch_buffer * self.num_items_per_set
-                        cycles_needed = self.last_prefetch_end_cycle - self.last_prefetch_start_cycle + 1
+                        cycles_needed = \
+                            self.last_prefetch_end_cycle - self.last_prefetch_start_cycle + 1
                         self.prefetch_bandwidth = math.ceil(elems_to_prefetch / cycles_needed)
                         self.prefetch()
                         self.prefetch_buffer_set_start_id += self.num_sets_prefetch_buffer
                         self.prefetch_buffer_set_end_id += self.num_sets_prefetch_buffer
-                    
-                    #Solving memory leak by discarding sets that are no longer in use
+
+                    # Solving memory leak by discarding sets that are no longer in use
                     i = self.read_buffer_set_start_id
                     for j in range(self.num_sets_prefetch_buffer):
                         self.list_of_sets[i+j] = None
@@ -241,14 +250,16 @@ class ReadBufferEstimateBw:
             for _ in range(delta):
                 all_addresses += [-1]
 
-        prefetch_requests = np.asarray(all_addresses).reshape((cycles_needed, self.prefetch_bandwidth))
+        prefetch_requests = np.asarray(all_addresses).reshape((cycles_needed,
+                                                               self.prefetch_bandwidth))
 
         cycles_arr = np.zeros((cycles_needed,1))
         for i in range(cycles_arr.shape[0]):
             cycles_arr[i][0] = self.last_prefetch_start_cycle + i
 
-        response_cycles_arr = self.backing_buffer.service_reads(incoming_cycles_arr=cycles_arr,
-                                                                incoming_requests_arr_np=prefetch_requests)
+        response_cycles_arr = \
+            self.backing_buffer.service_reads(incoming_cycles_arr=cycles_arr,
+                                              incoming_requests_arr_np=prefetch_requests)
 
         # Create / add elements to the trace matrix
         this_prefetch_traces = np.concatenate((response_cycles_arr, prefetch_requests), axis=1)
