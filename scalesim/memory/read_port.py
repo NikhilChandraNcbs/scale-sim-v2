@@ -4,12 +4,15 @@ class read_port:
     """
     Class to define dummy memory like interface to service the requests of the last level memory
     """
+    #
     def __init__(self):
         self.latency = 1
 
+    #
     def set_params(self, latency):
         self.latency = latency
 
+    #
     def get_latency(self):
         return self.latency
 

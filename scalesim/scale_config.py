@@ -7,6 +7,7 @@ class scale_config:
     """
     Class that handles the SCALE-Sim configuration files.
     """
+    #
     def __init__(self):
         self.run_name = "scale_run"
         # Anand: ISSUE #2. Patch
@@ -163,6 +164,7 @@ class scale_config:
         with open(conf_file_out, 'w') as configfile:
             config.write(configfile)
 
+    #
     def set_arr_dims(self, rows=1, cols=1):
         self.array_rows = rows
         self.array_cols = cols
@@ -236,6 +238,7 @@ class scale_config:
 
         return out_list
 
+    #
     def get_run_name(self):
         if not self.valid_conf_flag:
             print("ERROR: scale_config.get_run_name() : Config data is not valid")
@@ -243,12 +246,14 @@ class scale_config:
 
         return self.run_name
 
+    #
     def get_topology_path(self):
         if not self.valid_conf_flag:
             print("ERROR: scale_config.get_topology_path() : Config data is not valid")
             return
         return self.topofile
 
+    #
     def get_topology_name(self):
         if not self.valid_conf_flag:
             print("ERROR: scale_config.get_topology_name() : Config data is not valid")
@@ -259,14 +264,17 @@ class scale_config:
 
         return name
 
+    #
     def get_dataflow(self):
         if self.valid_conf_flag:
             return self.df
 
+    #
     def get_array_dims(self):
         if self.valid_conf_flag:
             return self.array_rows, self.array_cols
 
+    #
     def get_mem_sizes(self):
         me = 'scale_config.' + 'get_mem_sizes()'
 
@@ -277,18 +285,22 @@ class scale_config:
 
         return self.ifmap_sz_kb, self.filter_sz_kb, self.ofmap_sz_kb
 
+    #
     def get_offsets(self):
         if self.valid_conf_flag:
             return self.ifmap_offset, self.filter_offset, self.ofmap_offset
 
+    #
     def get_bandwidths_as_string(self):
         if self.valid_conf_flag:
             return ','.join([str(x) for x in self.bandwidths])
 
+    #
     def get_bandwidths_as_list(self):
         if self.valid_conf_flag:
             return self.bandwidths
 
+    #
     def get_min_dram_bandwidth(self):
         if not self.use_user_dram_bandwidth():
             me = 'scale_config.' + 'get_min_dram_bandwidth()'

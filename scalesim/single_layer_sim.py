@@ -15,6 +15,7 @@ class single_layer_sim:
     """
     Class which runs the simulation for a single layer and generates report data
     """
+    #
     def __init__(self):
         self.layer_id = 0
         self.topo = topo()
@@ -82,6 +83,7 @@ class single_layer_sim:
         self.runs_ready = False
         self.report_items_ready = False
 
+    #
     def set_params(self,
                    layer_id=0,
                    config_obj=cfg(), topology_obj=topo(),
@@ -140,6 +142,7 @@ class single_layer_sim:
             self.metadata_reads += metadata_storage
     # END of metadata calculation
 
+    #
     def run(self):
         assert self.params_set_flag, 'Parameters are not set. Run set_params()'
 

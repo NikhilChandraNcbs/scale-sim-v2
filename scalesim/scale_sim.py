@@ -9,6 +9,7 @@ class scalesim:
     The top level class for the SCALE-Sim v2 simulator Provides methods for setting parameters,
     running sims, and generating results
     """
+    #
     def __init__(self,
                  save_disk_space=False,
                  verbose=True,
@@ -90,6 +91,7 @@ class scalesim:
         )
         self.run_once()
 
+    #
     def run_once(self):
 
         if self.verbose_flag:

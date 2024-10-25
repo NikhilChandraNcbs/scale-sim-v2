@@ -13,6 +13,7 @@ class read_buffer:
     buffering helps to hide the DRAM latency when the SRAM is servicing requests from the systolic
     array using one of the buffers while the other buffer prefetches from the DRAM.
     """
+    #
     def __init__(self):
         # Buffer properties: User specified
         self.total_size_bytes = 128

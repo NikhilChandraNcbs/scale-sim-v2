@@ -2,6 +2,7 @@ import pandas as pd
 
 
 class ScalesimReport:
+    #
     def __init__(self):
         self.compute_df = pd.DataFrame()
         self.bandwidths_df = pd.DataFrame()

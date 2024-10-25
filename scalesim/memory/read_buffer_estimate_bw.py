@@ -8,6 +8,7 @@ class ReadBufferEstimateBw:
     """
     Class which service the estimate bandwidth mode in the read buffer
     """
+    #
     def __init__(self):
         # Buffer parameters
         self.word_size = 1
@@ -318,5 +319,3 @@ class ReadBufferEstimateBw:
             return
 
         np.savetxt(filename, self.trace_matrix, fmt='%s', delimiter=",")
-
-

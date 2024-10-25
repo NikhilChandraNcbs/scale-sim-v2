@@ -16,6 +16,7 @@ class double_buffered_scratchpad:
     double buffering helps to hide the DRAM latency when the SRAM is servicing requests from the
     systolic array using one of the buffers while the other buffer prefetches from the DRAM.
     """
+    #
     def __init__(self):
         self.ifmap_buf = rdbuf()
         self.filter_buf = rdbuf()

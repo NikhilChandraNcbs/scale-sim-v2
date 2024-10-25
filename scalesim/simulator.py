@@ -9,6 +9,7 @@ class simulator:
     """
     Class which runs the simulations and manages generated data across various layers
     """
+    #
     def __init__(self):
         self.conf = cfg()
         self.topo = topo()
@@ -219,6 +220,3 @@ class simulator:
             total_cycles += cycles_this_layer
 
         return total_cycles
-
-
-

@@ -12,6 +12,7 @@ class write_buffer:
     """
     Class which runs the memory simulation of the OFMAP SRAM.
     """
+    #
     def __init__(self):
         # Buffer properties: User specified
         self.total_size_bytes = 128

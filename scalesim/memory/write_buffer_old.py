@@ -7,6 +7,7 @@ from scalesim.memory.write_port import write_port
 
 
 class write_buffer:
+    #
     def __init__(self):
         """
         Class which runs the memory simulation of the OFMAP SRAM.
