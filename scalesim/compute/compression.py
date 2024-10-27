@@ -1,12 +1,22 @@
+"""
+This file contains the 'compression' class that defines the various compression formats such as
+Compressed Sparse Row, Compressed Sparse Column and Blocked ELLPACK. The class provides methods to
+obtain the Filter and Metadata storages along with original storage for all the compression formats
+mentioned.
+"""
+
 import numpy as np
 import math
 
 class compression:
     """
-    This class deals with calculating the storage for with/without sparsity
+    This class deals with calculating the filter storage for with/without sparsity cases.
     """
     #
     def compress_to_csr(self, matrix):
+        """
+        Method to compress a given matrix using the Compressed Sparse Row (CSR) format.
+        """
         rows, cols = matrix.shape
         data = []
         col_id = []
@@ -28,6 +38,9 @@ class compression:
 
     #
     def compress_to_csc(self, matrix):
+        """
+        Method to compress a given matrix using the Compressed Sparse Column (CSC) format.
+        """
         rows, cols = matrix.shape
         data = []
         row_id = []
@@ -49,8 +62,11 @@ class compression:
 
     #
     def compress_to_ellpack_block(self, matrix, filter_op_mat, sparsity_M):
-        # Each entry of the original matrix requires 1 word size
-        # Each entry in filter_op_mat will require 2 bits of metadata
+        """
+        Method to compress a given matrix using the Blocked ELLPACK format.
+        """
+        # Each entry of the original matrix requires 1 word size.
+        # Each entry in filter_op_mat will require log2(M) bits of metadata.
         original_rows, original_cols = matrix.shape
         new_rows, new_cols = filter_op_mat.shape
 
@@ -63,18 +79,30 @@ class compression:
 
     #
     def get_csr_storage(self, matrix):
+        """
+        Method to get the sizes of original filter, compressed dense filter matrix and its metadata
+        when CSR is used as the comprtession format.
+        """
         data, col_id, row_ptr, original_storage, new_storage, metadata_storage = \
             self.compress_to_csr(matrix)
         return original_storage, new_storage, metadata_storage
 
     #
     def get_csc_storage(self, matrix):
+        """
+        Method to get the sizes of original filter, compressed dense filter matrix and its metadata
+        when CSC is used as the comprtession format.
+        """
         data, row_id, col_ptr, original_storage, new_storage, metadata_storage = \
             self.compress_to_csc(matrix)
         return original_storage, new_storage, metadata_storage
 
     #
     def get_ellpack_block_storage(self, matrix, filter_op_mat, sparsity_M):
+        """
+        Method to get the sizes of original filter, compressed dense filter matrix and its metadata
+        when Blocked ELLPACK is used as the comprtession format.
+        """
         original_storage, new_storage, metadata_storage = \
             self.compress_to_ellpack_block(matrix, filter_op_mat, sparsity_M)
         return original_storage, new_storage, metadata_storage

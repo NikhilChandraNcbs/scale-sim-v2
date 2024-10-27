@@ -1,4 +1,6 @@
-# Double buffer read memory implementation
+"""
+Double buffer read memory implementation
+"""
 # TODO: Verification Pending
 import math
 import numpy as np
@@ -15,6 +17,8 @@ class read_buffer:
     """
     #
     def __init__(self):
+        """
+        """
         # Buffer properties: User specified
         self.total_size_bytes = 128
         self.word_size = 1         # Bytes
@@ -57,6 +61,8 @@ class read_buffer:
                    total_size_bytes=1, word_size=1, active_buf_frac=0.9,
                    hit_latency=1, backing_buf_bw=1
                    ):
+        """
+        """
 
         self.total_size_bytes = total_size_bytes
         self.word_size = word_size
@@ -75,6 +81,8 @@ class read_buffer:
 
     #
     def reset(self): # TODO: check if all resets are working propoerly
+        """
+        """
         # Buffer properties: User specified
         self.total_size_bytes = 128
         self.word_size = 1  # Bytes
@@ -114,6 +122,8 @@ class read_buffer:
 
     #
     def set_fetch_matrix(self, fetch_matrix_np):
+        """
+        """
         # The operand matrix determines what to pre-fetch into both active and prefetch buffers
         # req_gen_bandwidth is set to 100 by default and will be used in 'calc' mode
         # In 'user' mode, this will be set in the set_params
@@ -140,6 +150,8 @@ class read_buffer:
 
     #
     def prepare_hashed_buffer(self):
+        """
+        """
         elems_per_set = math.ceil(self.total_size_elems / 100)
 
         prefetch_rows = self.fetch_matrix.shape[0]
@@ -170,6 +182,8 @@ class read_buffer:
     def service_reads(self,
                       incoming_requests_arr_np, # 2D array with the requests
                       incoming_cycles_arr):     # 1D vector with the cycles at which req arrived
+        """
+        """
         # Service the incoming read requests
         # returns a cycles array corresponding to the requests buffer
         # Logic: Always check if an addr is in active buffer.
@@ -209,6 +223,8 @@ class read_buffer:
 
     #
     def prefetch_active_buffer(self, start_cycle):
+        """
+        """
         # Depending on size of the active buffer, calculate the number of lines from op mat to fetch
         # Also, calculate the cycles arr for requests
 
@@ -273,6 +289,8 @@ class read_buffer:
 
     #
     def new_prefetch(self):
+        """
+        """
         # In a new prefetch, some portion of the original data needs to be deleted to accomodate the
         # prefetched data.
         # In this case we overwrite some data in the active buffer with the prefetched data
@@ -355,6 +373,8 @@ class read_buffer:
 
     #
     def get_trace_matrix(self):
+        """
+        """
         if not self.trace_valid:
             print('No trace has been generated yet')
             return
@@ -363,15 +383,21 @@ class read_buffer:
 
     #
     def get_hit_latency(self):
+        """
+        """
         return self.hit_latency
 
     #
     def get_num_accesses(self):
+        """
+        """
         assert self.trace_valid, 'Traces not ready yet'
         return self.num_access
 
     #
     def get_external_access_start_stop_cycles(self):
+        """
+        """
         assert self.trace_valid, 'Traces not ready yet'
         start_cycle = self.trace_matrix[0][0]
         end_cycle = self.trace_matrix[-1][0]
@@ -380,6 +406,8 @@ class read_buffer:
 
     #
     def print_trace(self, filename):
+        """
+        """
         if not self.trace_valid:
             print('No trace has been generated yet')
             return

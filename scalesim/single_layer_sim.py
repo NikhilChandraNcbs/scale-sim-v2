@@ -1,3 +1,8 @@
+"""
+This file contains the 'single_layer_sim' class that handles the simulation for a single layer of
+the model and generates the data that goes inside the reports.
+"""
+
 import os
 import ast
 import numpy as np
@@ -17,6 +22,9 @@ class single_layer_sim:
     """
     #
     def __init__(self):
+        """
+        __init__ method
+        """
         self.layer_id = 0
         self.topo = topo()
         self.config = cfg()
@@ -88,6 +96,9 @@ class single_layer_sim:
                    layer_id=0,
                    config_obj=cfg(), topology_obj=topo(),
                    verbose=True):
+        """
+        Method to set the run parameters for housekeeping.
+        """
 
         self.layer_id = layer_id
         self.config = config_obj
@@ -115,11 +126,18 @@ class single_layer_sim:
     # This communicates that the memory is being managed externally
     # And the class will not interfere with setting it up
     def set_memory_system(self, mem_sys_obj=mem_dbsp()):
+        """
+        Method to explicitely set the memory system.
+        """
         self.memory_system = mem_sys_obj
         self.memory_system_ready_flag = True
 
-    # Filter Metadata Calculation
-    def calculate_metadata_reads(self, filter_op_mat):
+    #
+    def calculate_filter_metadata_storage(self, filter_op_mat):
+        """
+        Method to calculate the storage occupied by the filter matrix and filter metadata when
+        sparsity is enabled.
+        """
         if self.config.sparsity_support == True:
             sparse_array_np = self.op_mat_obj.sparse_filter_array
             original_storage = 0
@@ -144,6 +162,11 @@ class single_layer_sim:
 
     #
     def run(self):
+        """
+        Method to run scalesim simulation for a single layer. This method first runs the compute
+        part to generate operand, prefetch and demand matrices in order. After that, it runs the
+        memory simulation using the demand matrices.
+        """
         assert self.params_set_flag, 'Parameters are not set. Run set_params()'
 
         # 1. Setup and the get the demand from compute system
@@ -153,8 +176,8 @@ class single_layer_sim:
         _, filter_op_mat = self.op_mat_obj.get_filter_matrix()
         _, ofmap_op_mat = self.op_mat_obj.get_ofmap_matrix()
 
-        # 1.2 Get the metadata for the filter matrix
-        self.calculate_metadata_reads(filter_op_mat)
+        # 1.2 Calculate the storage occupied by filter and its metadata
+        self.calculate_filter_metadata_storage(filter_op_mat)
         self.num_compute = self.topo.get_layer_num_ofmap_px(self.layer_id) \
                            * self.topo.get_layer_window_size(self.layer_id)
 
@@ -229,6 +252,9 @@ class single_layer_sim:
 
     # This will write the traces
     def save_traces(self, top_path):
+        """
+        Method to save SRAM and DRAM traces for ifmap, filter and ofmap matrices.
+        """
         assert self.params_set_flag, 'Parameters are not set'
 
         dir_name = top_path + '/layer' + str(self.layer_id)
@@ -253,6 +279,10 @@ class single_layer_sim:
 
     #
     def calc_report_data(self):
+        """
+        Method to generate the report data for a single layer if the run is already completed. This
+        method collects and calculates the data for compute, bandwidth and detail reports.
+        """
         assert self.runs_ready, 'Runs are not done yet'
 
         # Compute report
@@ -304,11 +334,17 @@ class single_layer_sim:
 
     #
     def get_layer_id(self):
+        """
+        Method to return layer id.
+        """
         assert self.params_set_flag, 'Parameters are not set yet'
         return self.layer_id
 
     #
     def get_compute_report_items(self):
+        """
+        Method to calculate data for the compute report if not already done.
+        """
         if not self.report_items_ready:
             self.calc_report_data()
 
@@ -321,6 +357,9 @@ class single_layer_sim:
 
     #
     def get_bandwidth_report_items(self):
+        """
+        Method to calculate data for the bandwidth report if not already done.
+        """
         if not self.report_items_ready:
             self.calc_report_data()
 
@@ -338,6 +377,9 @@ class single_layer_sim:
 
     #
     def get_detail_report_items(self):
+        """
+        Method to calculate data for the detailed report if not already done.
+        """
         if not self.report_items_ready:
             self.calc_report_data()
 
@@ -352,6 +394,9 @@ class single_layer_sim:
 
     #
     def get_sparse_report_items(self):
+        """
+        Method to calculate data for the sparse report if not already done.
+        """
         if not self.report_items_ready:
             self.calc_report_data()
 

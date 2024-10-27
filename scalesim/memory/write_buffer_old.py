@@ -1,4 +1,6 @@
-# Buffer to stage the data to be written
+"""
+Buffer to stage the data to be written
+"""
 # TODO: Verification Pending
 import math
 import numpy as np
@@ -55,6 +57,8 @@ class write_buffer:
                    total_size_bytes=128, word_size=1, active_buf_frac=0.9,
                    backing_buf_bw=100
                    ):
+        """
+        """
         self.total_size_bytes = total_size_bytes
         self.word_size = word_size
 
@@ -71,6 +75,8 @@ class write_buffer:
 
     #
     def reset(self):
+        """
+        """
         self.total_size_bytes = 128
         self.word_size = 1
         self.active_buf_frac = 0.9
@@ -92,6 +98,8 @@ class write_buffer:
 
     #
     def service_writes(self, incoming_requests_arr_np, incoming_cycles_arr_np):
+        """
+        """
         assert incoming_cycles_arr_np.shape[0] == incoming_requests_arr_np.shape[0], \
                'Cycles and requests do not match'
         out_cycles_arr = []
@@ -144,6 +152,8 @@ class write_buffer:
 
     #
     def empty_drain_buf(self, empty_start_cycle=0):
+        """
+        """
 
         data_sz_to_drain = min(len(self.drain_buf_contents), self.drain_buf_size)
 
@@ -177,6 +187,8 @@ class write_buffer:
 
     #
     def drain_active_buf(self):
+        """
+        """
         while len(self.active_buf_contents) > 0:
             for i in range(self.drain_buf_size):
                 elem = self.active_buf_contents[i]
@@ -187,6 +199,8 @@ class write_buffer:
 
     #
     def empty_all_buffers(self, cycle):
+        """
+        """
         if self.state == 0:
             self.drain_end_cycle = self.empty_drain_buf(empty_start_cycle=cycle)
             self.state = 1
@@ -195,6 +209,8 @@ class write_buffer:
 
     #
     def get_trace_matrix(self):
+        """
+        """
         if not self.trace_valid:
             print('No trace has been generated yet')
             return
@@ -203,15 +219,21 @@ class write_buffer:
 
     #
     def get_free_space(self):
+        """
+        """
         return self.free_space
 
     #
     def get_num_accesses(self):
+        """
+        """
         assert self.trace_valid, 'Traces not ready yet'
         return self.num_access
 
     #
     def get_external_access_start_stop_cycles(self):
+        """
+        """
         assert self.trace_valid, 'Traces not ready yet'
         start_cycle = self.trace_matrix[0][0]
         end_cycle = self.trace_matrix[-1][0]
@@ -220,6 +242,8 @@ class write_buffer:
 
     #
     def print_trace(self, filename):
+        """
+        """
         if not self.trace_valid:
             print('No trace has been generated yet')
             return

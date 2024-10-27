@@ -1,3 +1,8 @@
+"""
+This file defines the 'scale_config' class responsible for all the configuration file related
+activities such as parsing the config file, writing the parameters into a config file, updating the
+parameters.
+"""
 import configparser as cp
 import os
 import sys
@@ -9,6 +14,9 @@ class scale_config:
     """
     #
     def __init__(self):
+        """
+        __init__ method
+        """
         self.run_name = "scale_run"
         # Anand: ISSUE #2. Patch
         self.use_user_bandwidth = False
@@ -36,6 +44,9 @@ class scale_config:
 
     #
     def read_conf_file(self, conf_file_in):
+        """
+        Method to read the configuration file and extract all the archietctural knobs.
+        """
 
         me = 'scale_config.' + 'read_conf_file()'
 
@@ -99,6 +110,9 @@ class scale_config:
 
     #
     def update_from_list(self, conf_list):
+        """
+        Method to update the parameters through a configuration list.
+        """
         if not len(conf_list) > 11:
             print("ERROR: scale_config.update_from_list: "
                   "Incompatible number of elements in the list")
@@ -130,6 +144,9 @@ class scale_config:
 
     #
     def write_conf_file(self, conf_file_out):
+        """
+        Method to generate a configuration file.
+        """
         if not self.valid_conf_flag:
             print('ERROR: scale_config.write_conf_file: No valid config loaded')
             return
@@ -166,21 +183,34 @@ class scale_config:
 
     #
     def set_arr_dims(self, rows=1, cols=1):
+        """
+        Method to set the dimensions of the PE array, with default dimensions set to 1x1.
+        """
         self.array_rows = rows
         self.array_cols = cols
 
     #
     def set_dataflow(self, dataflow='os'):
+        """
+        Method to set the dataflow for the matric multiplication with Output Stationary being the
+        default dataflow.
+        """
         self.df = dataflow
 
     #
     def set_buffer_sizes_kb(self, ifmap_size_kb=1, filter_size_kb=1, ofmap_size_kb=1):
+        """
+        Method to set the IFMAP, Filter and OFMAP SRAM sizes, with the defaults set to 1kB.
+        """
         self.ifmap_sz_kb = ifmap_size_kb
         self.filter_sz_kb = filter_size_kb
         self.ofmap_sz_kb = ofmap_size_kb
 
     #
     def set_topology_file(self, topofile=''):
+        """
+        Method to set the topology file path.
+        """
         self.topofile = topofile
 
     #
@@ -189,6 +219,10 @@ class scale_config:
                     filter_offset=10000000,
                     ofmap_offset=20000000
                     ):
+        """
+        Method to set the offsets used for IFMAP, Filter and OFMAP addresses, with the defaults set
+        to 0, 10M and 20M respectively.
+        """
         self.ifmap_offset = ifmap_offset
         self.filter_offset = filter_offset
         self.ifmap_offset = ofmap_offset
@@ -196,14 +230,23 @@ class scale_config:
 
     #
     def force_valid(self):
+        """
+        Method to set the 'valid_config_flag' without any checks.
+        """
         self.valid_conf_flag = True
 
     #
     def set_bw_mode_to_calc(self):
+        """
+        Method to set the 'use_user_bandwidth' to CALC mode.
+        """
         self.use_user_bandwidth = False
 
     #
     def use_user_dram_bandwidth(self):
+        """
+        Method that returns the value of 'use_user_bandwidth'.
+        """
         if not self.valid_conf_flag:
             me = 'scale_config.' + 'use_user_dram_bandwidth()'
             message = 'ERROR: ' + me + ': Configuration is not valid'
@@ -214,6 +257,9 @@ class scale_config:
 
     #
     def get_conf_as_list(self):
+        """
+        Method to extract the configuration parameters in the form of a list.
+        """
         out_list = []
 
         if not self.valid_conf_flag:
@@ -240,6 +286,9 @@ class scale_config:
 
     #
     def get_run_name(self):
+        """
+        Method to get the run name used for the simulation.
+        """
         if not self.valid_conf_flag:
             print("ERROR: scale_config.get_run_name() : Config data is not valid")
             return
@@ -248,6 +297,9 @@ class scale_config:
 
     #
     def get_topology_path(self):
+        """
+        Method to get the topology file path used for the simulation.
+        """
         if not self.valid_conf_flag:
             print("ERROR: scale_config.get_topology_path() : Config data is not valid")
             return
@@ -255,6 +307,9 @@ class scale_config:
 
     #
     def get_topology_name(self):
+        """
+        Method to extract the name of the topology file from the topology path.
+        """
         if not self.valid_conf_flag:
             print("ERROR: scale_config.get_topology_name() : Config data is not valid")
             return
@@ -266,16 +321,25 @@ class scale_config:
 
     #
     def get_dataflow(self):
+        """
+        Method to get the dataflow used for the simulation.
+        """
         if self.valid_conf_flag:
             return self.df
 
     #
     def get_array_dims(self):
+        """
+        Method to get the dimensions of the PE array.
+        """
         if self.valid_conf_flag:
             return self.array_rows, self.array_cols
 
     #
     def get_mem_sizes(self):
+        """
+        Method to get the IFMAP, Filter and OFMAP SRAM sizes.
+        """
         me = 'scale_config.' + 'get_mem_sizes()'
 
         if not self.valid_conf_flag:
@@ -287,21 +351,33 @@ class scale_config:
 
     #
     def get_offsets(self):
+        """
+        Method to get the offsets used for IFMAP, Filter and OFMAP addresses.
+        """
         if self.valid_conf_flag:
             return self.ifmap_offset, self.filter_offset, self.ofmap_offset
 
     #
     def get_bandwidths_as_string(self):
+        """
+        Method to get the bandwidths as a string.
+        """
         if self.valid_conf_flag:
             return ','.join([str(x) for x in self.bandwidths])
 
     #
     def get_bandwidths_as_list(self):
+        """
+        Method to get the bandwidths as a list.
+        """
         if self.valid_conf_flag:
             return self.bandwidths
 
     #
     def get_min_dram_bandwidth(self):
+        """
+        Method to get the minimum DRAM bandwidth defined in the configuration.
+        """
         if not self.use_user_dram_bandwidth():
             me = 'scale_config.' + 'get_min_dram_bandwidth()'
             message = 'ERROR: ' + me + ': No user bandwidth provided'
@@ -312,6 +388,9 @@ class scale_config:
     # FIX ISSUE #14
     @staticmethod
     def get_default_conf_as_list():
+        """
+        Method to get the default configuration as a list.
+        """
         dummy_obj = scale_config()
         dummy_obj.force_valid()
         out_list = dummy_obj.get_conf_as_list()

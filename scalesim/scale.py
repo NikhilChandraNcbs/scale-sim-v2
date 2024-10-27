@@ -1,6 +1,6 @@
 """
-Main script for running Scale-Sim with given topology and configuration files.
-Handles argument parsing and execution.
+This file is the main script for running SCALE-Sim with the given topology and configuration files.
+It handles argument parsing and execution.
 """
 
 import argparse

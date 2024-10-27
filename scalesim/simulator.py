@@ -1,3 +1,8 @@
+"""
+This file contains the 'simulator' class that simulates the entire model using the class
+'single_layer_sim' and generates the reports (.csv files).
+"""
+
 import os
 
 from scalesim.scale_config import scale_config as cfg
@@ -11,6 +16,9 @@ class simulator:
     """
     #
     def __init__(self):
+        """
+        __init__ method
+        """
         self.conf = cfg()
         self.topo = topo()
 
@@ -33,7 +41,9 @@ class simulator:
                    verbosity=True,
                    save_trace=True
                    ):
-
+        """
+        Method to set the run parameters including inputs and parameters for housekeeping.
+        """
         self.conf = config_obj
         self.topo = topo_obj
 
@@ -48,6 +58,13 @@ class simulator:
 
     #
     def run(self):
+        """
+        Method to run scalesim simulation for all layers. This method first runs compute and memory
+        simulations for each layer and gathers the required stats. Once the simulation runs are
+        done, it gathers the stats from single_layer_sim objects and calls generate_report() method
+        to create the report files. If save_trace flag is set, then layer wise traces are saved as
+        well.
+        """
         assert self.params_set_flag, 'Simulator parameters are not set'
 
         # 1. Create the layer runners for each layer
@@ -137,6 +154,12 @@ class simulator:
 
     #
     def generate_reports(self):
+        """
+        Method to generate the report files for scalesim run if the runs are already completed. For
+        each layer, this method collects the report data from single_layer_sim objects and then
+        prints them out into COMPUTE_REPORT.csv, BANDWIDTH_REPORT.csv, DETAILED_ACCESS_REPORT.csv
+        and SPARSE_REPORT.csv files.
+        """
         assert self.all_layer_run_done, 'Layer runs are not done yet'
 
         compute_report_name = self.top_path + '/COMPUTE_REPORT.csv'
@@ -171,8 +194,8 @@ class simulator:
             sparse_report = open(sparse_report_name, 'w')
             header = 'LayerID, '
             header += 'Sparsity Representation, '
-            header += 'Original Filter Storage, New Storage (Filter+Metadata), \
-                       Filter Metadata Storage, '
+            header += ('Original Filter Storage, New Storage (Filter+Metadata),'
+                       ' Filter Metadata Storage, ')
             header += 'Avg FILTER Metadata SRAM BW, '
             header += '\n'
             sparse_report.write(header)
@@ -212,6 +235,10 @@ class simulator:
 
     #
     def get_total_cycles(self):
+        """
+        Method which aggregates the total cycles (both compute and stall) across all the layers for
+        the given workload.
+        """
         assert self.all_layer_run_done, 'Layer runs are not done yet'
 
         total_cycles = 0

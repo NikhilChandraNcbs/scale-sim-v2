@@ -1,3 +1,8 @@
+"""
+This file contains 'scalesim' class that provides a framework to run simulations, generate traces
+and reports.
+"""
+
 import os
 from scalesim.scale_config import scale_config
 from scalesim.topology_utils import topologies
@@ -6,8 +11,8 @@ from scalesim.simulator import simulator
 
 class scalesim:
     """
-    The top level class for the SCALE-Sim v2 simulator Provides methods for setting parameters,
-    running sims, and generating results
+    The top level class for the SCALE-Sim v2 simulator that provides methods for setting parameters,
+    running sims, and generating results.
     """
     #
     def __init__(self,
@@ -17,7 +22,9 @@ class scalesim:
                  topology='',
                  input_type_gemm=False
                  ):
-
+        """
+        __init__ method
+        """
         # Data structures
         self.config = scale_config()
         self.topo = topologies()
@@ -43,6 +50,9 @@ class scalesim:
     def set_params(self,
                    config_filename='',
                    topology_filename=''):
+        """
+        Set or update the paths to the scalesim input files.
+        """
         # First check if the user provided a valid topology file
         if not topology_filename == '':
             if not os.path.exists(topology_filename):
@@ -79,6 +89,9 @@ class scalesim:
 
     #
     def run_scale(self, top_path='.'):
+        """
+        Method to initialize the internal simulation objects and run scalesim once.
+        """
 
         self.top_path = top_path
         save_trace = not self.save_space
@@ -93,6 +106,9 @@ class scalesim:
 
     #
     def run_once(self):
+        """
+        Method to run the simulation once with preset config and topology objects.
+        """
 
         if self.verbose_flag:
             self.print_run_configs()
@@ -120,6 +136,9 @@ class scalesim:
 
     #
     def print_run_configs(self):
+        """
+        Method to print the banner of input parameters for verbose scalesim runs.
+        """
         df_string = "Output Stationary"
         df = self.config.get_dataflow()
 
@@ -152,6 +171,10 @@ class scalesim:
 
     #
     def get_total_cycles(self):
+        """
+        Method to get the total cycles (stalls + compute) for the workload once the simulation is
+        completed.
+        """
         me = 'scale.' + 'get_total_cycles()'
         if not self.run_done_flag:
             message = 'ERROR: ' + me

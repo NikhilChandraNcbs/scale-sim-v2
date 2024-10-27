@@ -1,3 +1,8 @@
+"""
+The 'ReadBufferEstimateBw' class simulates a double-buffered memory read buffer in estimate
+bandwidth mode designed for systolic array computations.
+"""
+
 import math
 import numpy as np
 
@@ -6,10 +11,13 @@ from scalesim.memory.read_port import read_port
 
 class ReadBufferEstimateBw:
     """
-    Class which service the estimate bandwidth mode in the read buffer
+    Class which service the estimate bandwidth mode in the read buffer.
     """
     #
     def __init__(self):
+        """
+        __init__ method.
+        """
         # Buffer parameters
         self.word_size = 1
         self.active_buf_frac = 0.5
@@ -59,6 +67,10 @@ class ReadBufferEstimateBw:
     def set_params(self, backing_buf_obj,
                    total_size_bytes=1, word_size=1, active_buf_frac=0.9,
                    hit_latency=1, backing_buf_default_bw=1):
+        """
+        Method to set the ifmap/filter double buffered memory simulation parameters for estimate
+        bandwidth mode.
+        """
 
         self.total_size_bytes = total_size_bytes
         self.word_size = word_size
@@ -94,6 +106,9 @@ class ReadBufferEstimateBw:
 
     #
     def service_reads(self, incoming_requests_arr_np, incoming_cycles_arr):
+        """
+        Method to service read requests coming from systolic array in estimate bandwidth mode.
+        """
         assert self.params_set_flag, 'Parameters are not set yet'
         assert incoming_cycles_arr.shape[0] == incoming_requests_arr_np.shape[0],\
                'Incoming cycles and requests dont match'
@@ -120,6 +135,9 @@ class ReadBufferEstimateBw:
 
     #
     def manage_prefetches(self, cycle, addr):
+        """
+        Method to manage prefetches in estimate bandwidth mode.
+        """
 
         # If this is a new address, otherwise its a hit
         if self.check_hit(addr):
@@ -177,6 +195,9 @@ class ReadBufferEstimateBw:
 
     #
     def check_hit(self, addr):
+        """
+        Method to check if the address is hit or miss in the active read buffer.
+        """
         assert self.params_set_flag, 'Parameters are not set yet'
 
         start_set_idx = self.read_buffer_set_start_id
@@ -193,6 +214,10 @@ class ReadBufferEstimateBw:
 
     #
     def complete_all_prefetches(self):
+        """
+        Method to complete all the prefetches in estimate bandwidth mode. Prefetch first the active
+        buffer if not done before and then keep prefetching prefetch buffers.
+        """
         assert self.params_set_flag, 'Parameters are not set yet'
 
         current_set_elems = list(self.current_set)
@@ -226,6 +251,11 @@ class ReadBufferEstimateBw:
 
     #
     def prefetch(self):
+        """
+        Method to do a new prefetch. In a new prefetch, some portion of the original data needs to
+        be deleted to accomodate the prefetched data In this case we overwrite some data in the
+        active buffer with the prefetched data and then create a new prefetch request.
+        """
         assert self.params_set_flag, 'Parameters are not set yet'
 
         if not self.active_buffer_prefetch_done:
@@ -284,11 +314,18 @@ class ReadBufferEstimateBw:
 
     #
     def get_latency(self):
+        """
+        Method to get hit latency of the read estimate buffer.
+        """
         assert self.params_set_flag, 'Parameters are not valid'
         return self.hit_latency
 
     #
     def get_trace_matrix(self):
+        """
+        Method to get the read estimate buffer trace matrix. It contains addresses requsted by the
+        systolic array and the cycles (first column) at which the requests are made.
+        """
         if not self.trace_valid:
             print('No trace has been generated yet')
             return
@@ -297,15 +334,24 @@ class ReadBufferEstimateBw:
 
     #
     def get_hit_latency(self):
+        """
+        Method to get hit latency of the read estimate buffer.
+        """
         return self.hit_latency
 
     #
     def get_num_accesses(self):
+        """
+        Method to get number of accesses of the read estimate buffer if trace_valid flag is set.
+        """
         assert self.trace_valid, 'Traces not ready yet'
         return self.num_access
 
     #
     def get_external_access_start_stop_cycles(self):
+        """
+        Method to get start and stop cycles of the read estimate buffer if trace_valid flag is set.
+        """
         assert self.trace_valid, 'Traces not ready yet'
         start_cycle = self.trace_matrix[0][0]
         end_cycle = self.trace_matrix[-1][0]
@@ -314,6 +360,9 @@ class ReadBufferEstimateBw:
 
     #
     def print_trace(self, filename):
+        """
+        Method to write the read estimate buffer trace matrix to a file.
+        """
         if not self.trace_valid:
             print('No trace has been generated yet')
             return

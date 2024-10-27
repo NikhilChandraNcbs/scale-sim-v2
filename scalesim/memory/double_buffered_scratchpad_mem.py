@@ -1,3 +1,8 @@
+"""
+This file contains the 'double_buffered_scratchpad' class that handles memory module simulations of
+double buffered SRAMs.
+"""
+
 import time
 import numpy as np
 from tqdm import tqdm
@@ -18,6 +23,9 @@ class double_buffered_scratchpad:
     """
     #
     def __init__(self):
+        """
+        __init__ method.
+        """
         self.ifmap_buf = rdbuf()
         self.filter_buf = rdbuf()
         self.ofmap_buf =wrbuf()
@@ -70,6 +78,9 @@ class double_buffered_scratchpad:
                    ifmap_buf_size_bytes=2, filter_buf_size_bytes=2, ofmap_buf_size_bytes=2,
                    rd_buf_active_frac=0.5, wr_buf_active_frac=0.5,
                    ifmap_backing_buf_bw=1, filter_backing_buf_bw=1, ofmap_backing_buf_bw=1):
+        """
+        Method to set the double buffered memory simulation parameters for housekeeping.
+        """
 
         self.estimate_bandwidth_mode = estimate_bandwidth_mode
 
@@ -119,12 +130,18 @@ class double_buffered_scratchpad:
                                        ifmap_prefetch_mat=np.zeros((1,1)),
                                        filter_prefetch_mat=np.zeros((1,1))
                                        ):
+        """
+        Method to read ifmap and filter prefetch matrices generated in the compute simulation.
+        """
 
         self.ifmap_buf.set_fetch_matrix(ifmap_prefetch_mat)
         self.filter_buf.set_fetch_matrix(filter_prefetch_mat)
 
     #
     def reset_buffer_states(self):
+        """
+        Method to reset ifmap, filter and ofmap SRAMs.
+        """
 
         self.ifmap_buf.reset()
         self.filter_buf.reset()
@@ -134,6 +151,9 @@ class double_buffered_scratchpad:
     def service_ifmap_reads(self,
                             incoming_requests_arr_np,   # 2D array with the requests
                             incoming_cycles_arr):
+        """
+        Method to service ifmap read requests coming from systolic array.
+        """
         out_cycles_arr_np = self.ifmap_buf.service_reads(incoming_requests_arr_np,
                                                          incoming_cycles_arr)
 
@@ -143,6 +163,9 @@ class double_buffered_scratchpad:
     def service_filter_reads(self,
                             incoming_requests_arr_np,   # 2D array with the requests
                             incoming_cycles_arr):
+        """
+        Method to service filter read requests coming from systolic array.
+        """
         out_cycles_arr_np = self.filter_buf.service_reads(incoming_requests_arr_np,
                                                           incoming_cycles_arr)
 
@@ -152,6 +175,9 @@ class double_buffered_scratchpad:
     def service_ofmap_writes(self,
                              incoming_requests_arr_np,  # 2D array with the requests
                              incoming_cycles_arr):
+        """
+        Method to service ofmap write requests coming from systolic array.
+        """
 
         out_cycles_arr_np = self.ofmap_buf.service_writes(incoming_requests_arr_np,
                                                           incoming_cycles_arr)
@@ -160,6 +186,10 @@ class double_buffered_scratchpad:
 
     #
     def service_memory_requests(self, ifmap_demand_mat, filter_demand_mat, ofmap_demand_mat):
+        """
+        Method to run the memory simulation of ifmap, filter and ofmap SRAMs together and generate
+        the traces.
+        """
         assert self.params_valid_flag, 'Memories not initialized yet'
 
         ofmap_lines = ofmap_demand_mat.shape[0]
@@ -233,6 +263,8 @@ class double_buffered_scratchpad:
     # This is the trace computation logic of this memory system
     # Anand: This is too complex, perform the serve cycle by cycle for the requests
     def service_memory_requests_old(self, ifmap_demand_mat, filter_demand_mat, ofmap_demand_mat):
+        """
+        """
         # TODO: assert sanity check
         assert self.params_valid_flag, 'Memories not initialized yet'
 
@@ -387,16 +419,26 @@ class double_buffered_scratchpad:
 
     #
     def get_total_compute_cycles(self):
+        """
+        Method to get the total number of compute cycles if trace_valid flag is set.
+        """
         assert self.traces_valid, 'Traces not generated yet'
         return self.total_cycles
 
     #
     def get_stall_cycles(self):
+        """
+        Method to get the number of stall cycles if trace_valid flag is set.
+        """
         assert self.traces_valid, 'Traces not generated yet'
         return self.stall_cycles
 
     #
     def get_ifmap_sram_start_stop_cycles(self):
+        """
+        Method to get the start and stop cycles of ifmap SRAM requests by the systolic array if
+        trace_valid flag is set.
+        """
         assert self.traces_valid, 'Traces not generated yet'
 
         done = False
@@ -426,6 +468,10 @@ class double_buffered_scratchpad:
 
     #
     def get_filter_sram_start_stop_cycles(self):
+        """
+        Method to get the start and stop cycles of filter SRAM requests by the systolic array if
+        trace_valid flag is set.
+        """
         assert self.traces_valid, 'Traces not generated yet'
 
         done = False
@@ -457,6 +503,10 @@ class double_buffered_scratchpad:
 
     #
     def get_ofmap_sram_start_stop_cycles(self):
+        """
+        Method to get the start and stop cycles of ofmap SRAM requests by the systolic array if
+        trace_valid flag is set.
+        """
         assert self.traces_valid, 'Traces not generated yet'
 
         done = False
@@ -486,6 +536,10 @@ class double_buffered_scratchpad:
 
     #
     def get_ifmap_dram_details(self):
+        """
+        Method to get the start cycle, stop cycle and number of reads of DRAM requests made by the
+        ifmap SRAM if trace_valid flag is set.
+        """
         assert self.traces_valid, 'Traces not generated yet'
 
         self.ifmap_dram_reads = self.ifmap_buf.get_num_accesses()
@@ -496,6 +550,10 @@ class double_buffered_scratchpad:
 
     #
     def get_filter_dram_details(self):
+        """
+        Method to get the start cycle, stop cycle and number of reads of DRAM requests made by the
+        filter SRAM if trace_valid flag is set.
+        """
         assert self.traces_valid, 'Traces not generated yet'
 
         self.filter_dram_reads = self.filter_buf.get_num_accesses()
@@ -506,6 +564,10 @@ class double_buffered_scratchpad:
 
     #
     def get_ofmap_dram_details(self):
+        """
+        Method to get the start cycle, stop cycle and number of writes of DRAM requests made by the
+        ofmap SRAM if trace_valid flag is set.
+        """
         assert self.traces_valid, 'Traces not generated yet'
 
         self.ofmap_dram_writes = self.ofmap_buf.get_num_accesses()
@@ -516,38 +578,68 @@ class double_buffered_scratchpad:
 
     #
     def get_ifmap_sram_trace_matrix(self):
+        """
+        Method to get the ifmap SRAM trace matrix. It contains addresses requsted by the systolic
+        array and the cycles (first column) at which the requests are made.
+        """
         assert self.traces_valid, 'Traces not generated yet'
         return self.ifmap_trace_matrix
 
     #
     def get_filter_sram_trace_matrix(self):
+        """
+        Method to get the filter SRAM trace matrix. It contains addresses requsted by the systolic
+        array and the cycles (first column) at which the requests are made.
+        """
         assert self.traces_valid, 'Traces not generated yet'
         return self.filter_trace_matrix
 
     #
     def get_ofmap_sram_trace_matrix(self):
+        """
+        Method to get the ofmap SRAM trace matrix. It contains addresses requsted by the systolic
+        array and the cycles (first column) at which the requests are made.
+        """
         assert self.traces_valid, 'Traces not generated yet'
         return self.ofmap_trace_matrix
 
     #
     def get_sram_trace_matrices(self):
+        """
+        Method to get the ifmap, filter and ofmap SRAM trace matrices.
+        """
         assert self.traces_valid, 'Traces not generated yet'
         return self.ifmap_trace_matrix, self.filter_trace_matrix, self.ofmap_trace_matrix
 
     #
     def get_ifmap_dram_trace_matrix(self):
+        """
+        Method to get the ifmap DRAM trace matrix. It contains addresses requsted by the ifmap SRAM
+        and the cycles (first column) at which the requests are made.
+        """
         return self.ifmap_buf.get_trace_matrix()
 
     #
     def get_filter_dram_trace_matrix(self):
+        """
+        Method to get the filter DRAM trace matrix. It contains addresses requsted by the filter
+        SRAM and the cycles (first column) at which the requests are made.
+        """
         return self.filter_buf.get_trace_matrix()
 
     #
     def get_ofmap_dram_trace_matrix(self):
+        """
+        Method to get the ofmap DRAM trace matrix. It contains addresses requsted by the ofmap SRAM
+        and the cycles (first column) at which the requests are made.
+        """
         return self.ofmap_buf.get_trace_matrix()
 
     #
     def get_dram_trace_matrices(self):
+        """
+        Method to get the ifmap, filter and ofmap DRAM trace matrices
+        """
         dram_ifmap_trace = self.ifmap_buf.get_trace_matrix()
         dram_filter_trace = self.filter_buf.get_trace_matrix()
         dram_ofmap_trace = self.ofmap_buf.get_trace_matrix()
@@ -556,28 +648,46 @@ class double_buffered_scratchpad:
 
     #
     def print_ifmap_sram_trace(self, filename):
+        """
+        Method to write the ifmap SRAM trace matrix to a file if trace_valid flag is set.
+        """
         assert self.traces_valid, 'Traces not generated yet'
         os.makedirs(os.path.dirname(filename), exist_ok=True)
         np.savetxt(filename, self.ifmap_trace_matrix, fmt='%i', delimiter=",")
 
     #
     def print_filter_sram_trace(self, filename):
+        """
+        Method to write the filter SRAM trace matrix to a file if trace_valid flag is set.
+        """
         assert self.traces_valid, 'Traces not generated yet'
         np.savetxt(filename, self.filter_trace_matrix, fmt='%i', delimiter=",")
 
     #
     def print_ofmap_sram_trace(self, filename):
+        """
+        Method to write the Ofmap SRAM trace matrix to a file if trace_valid flag is set.
+        """
         assert self.traces_valid, 'Traces not generated yet'
         np.savetxt(filename, self.ofmap_trace_matrix, fmt='%i', delimiter=",")
 
     #
     def print_ifmap_dram_trace(self, filename):
+        """
+        Method to write the ifmap DRAM trace matrix to a file.
+        """
         self.ifmap_buf.print_trace(filename)
 
     #
     def print_filter_dram_trace(self, filename):
+        """
+        Method to write the filter DRAM trace matrix to a file.
+        """
         self.filter_buf.print_trace(filename)
 
     #
     def print_ofmap_dram_trace(self, filename):
+        """
+        Method to write the iomap DRAM trace matrix to a file.
+        """
         self.ofmap_buf.print_trace(filename)

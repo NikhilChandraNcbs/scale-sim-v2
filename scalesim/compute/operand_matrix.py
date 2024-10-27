@@ -1,3 +1,8 @@
+"""
+This file contains the 'operand_matrix' class responsible for creating the IFMAP, Filter and OFMAP
+operand matrices.
+"""
+
 import math
 import numpy as np
 from tqdm import tqdm
@@ -13,6 +18,9 @@ class operand_matrix(object):
     """
     #
     def __init__(self):
+        """
+        __init__ method.
+        """
         # Objects from outer container classes
         self.config = cfg()
         self.topoutil = topoutil()
@@ -51,6 +59,9 @@ class operand_matrix(object):
                    topoutil_obj,
                    layer_id=0,
                    ):
+        """
+        Method to set the operand matrix parameters for housekeeping.
+        """
 
         self.config = config_obj
         self.topoutil = topoutil_obj
@@ -118,6 +129,9 @@ class operand_matrix(object):
 
     # top level function to create the operand matrices
     def create_operand_matrices(self):
+        """
+        Method to create IFMAP, Filter and OFMAP operand matrices.
+        """
         my_name = 'operand_matrix.create_operand_matrices(): '
         err_prefix = 'Error: ' + my_name
 
@@ -138,6 +152,9 @@ class operand_matrix(object):
 
     # creates the ifmap operand
     def create_ifmap_matrix(self):
+        """
+        Method to create IFMAP operand matrix.
+        """
         my_name = 'operand_matrix.create_ifmap_matrix(): '
         err_prefix = 'Error: ' + my_name
 
@@ -167,6 +184,9 @@ class operand_matrix(object):
 
     # logic to translate ifmap into matrix fed into systolic array MACs
     def calc_ifmap_elem_addr(self, i, j):
+        """
+        Method to calculate the address of an IFMAP element.
+        """
         offset = self.ifmap_offset
         ifmap_rows = self.ifmap_rows
         ifmap_cols = self.ifmap_cols
@@ -194,6 +214,9 @@ class operand_matrix(object):
 
     # creates the ofmap operand
     def create_ofmap_matrix(self):
+        """
+        Method to create OFMAP operand matrix.
+        """
         my_name = 'operand_matrix.create_ofmap_matrix(): '
         err_prefix = 'Error: ' + my_name
         if not self.params_set_flag:
@@ -213,6 +236,9 @@ class operand_matrix(object):
 
     # logic to translate ofmap into matrix resulting systolic array MACs
     def calc_ofmap_elem_addr(self, i, j):
+        """
+        Method to calculate the address of an OFMAP element.
+        """
         offset = self.ofmap_offset
         num_filt = self.num_filters
         internal_address = num_filt * i + j
@@ -221,6 +247,9 @@ class operand_matrix(object):
 
     # creates the filter operand
     def create_filter_matrix(self):
+        """
+        Method to create filter operand matrix.
+        """
         my_name = 'operand_matrix.create_filter_matrix(): '
         err_prefix = 'Error: ' + my_name
         if not self.params_set_flag:
@@ -278,6 +307,9 @@ class operand_matrix(object):
 
     # logic to translate filter into matrix fed into systolic array MACs
     def calc_filter_elem_addr(self, i, j):
+        """
+        Method to calculate the address of a filter element.
+        """
         offset = self.filter_offset
         filter_row = self.filter_rows
         filter_col = self.filter_cols
@@ -289,6 +321,10 @@ class operand_matrix(object):
     # function to get a part or the full ifmap operand
     def get_ifmap_matrix_part(self, start_row=0, num_rows=-1, start_col=0,
                               num_cols=-1):
+        """
+        Method to get a part or full IFMAP operand matrix if no error. If error, return the error
+        code.
+        """
         if num_rows == -1:
             num_rows = self.ofmap_px_per_filt
         if num_cols == -1:
@@ -319,11 +355,18 @@ class operand_matrix(object):
 
     #
     def get_ifmap_matrix(self):
+        """
+        Method to get IFMAP operand matrix.
+        """
         return self.get_ifmap_matrix_part()
 
     # function to get a part or the full filter operand
     def get_filter_matrix_part(self, start_row=0, num_rows=-1, start_col=0,
                                num_cols=-1):
+        """
+        Method to get a part or full filter operand matrix if no error. If error, return the error
+        code.
+        """
 
         if num_rows == -1:
             num_rows = self.conv_window_size
@@ -363,11 +406,18 @@ class operand_matrix(object):
 
     #
     def get_filter_matrix(self):
+        """
+        Method to get filter operand matrix.
+        """
         return self.get_filter_matrix_part()
 
     # function to get a part or the full ofmap operand
     def get_ofmap_matrix_part(self, start_row=0, num_rows=-1, start_col=0,
                                num_cols=-1):
+        """
+        Method to get a part or full OFMAP operand matrix if no error. If error, return the error
+        code.
+        """
 
         # Since we cannot pass self as an argument in the member functions
         # This is an alternate way of making the matrix dimensions as defaults
@@ -407,10 +457,16 @@ class operand_matrix(object):
 
     #
     def get_ofmap_matrix(self):
+        """
+        Method to get OFMAP operand matrix.
+        """
         return self.get_ofmap_matrix_part()
 
     #
     def get_all_operand_matrix(self):
+        """
+        Method to get IFMAP, Filter and OFMAP operand matrices.
+        """
         if not self.matrices_ready_flag:
             me = 'operand_matrix.' + 'get_all_operand_matrix()'
             message = 'ERROR:' + me + ': Matrices not ready or matrix gen failed'
