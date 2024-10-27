@@ -3,10 +3,9 @@ The `write_buffer` class simulates the memory operations of the OFMAP SRAM for a
 write system in systolic array-based computations.
 """
 # TODO: Verification Pending
-import time
 import math
 import numpy as np
-#import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from tqdm import tqdm
 from scalesim.memory.write_port import write_port
 
@@ -99,8 +98,6 @@ class write_buffer:
         self.req_gen_bandwidth = 100
 
         self.free_space = self.total_size_elems
-        self.active_buf_contents = []
-        self.drain_buf_contents = []
         self.drain_end_cycle = 0
 
         self.trace_matrix = np.zeros((1, 1))
@@ -198,8 +195,8 @@ class write_buffer:
         out_cycles_arr = []
         offset = 0
 
-        DEBUG_num_drains = 0
-        DEBUG_append_to_trace_times = []
+        # DEBUG_num_drains = 0
+        # DEBUG_append_to_trace_times = []
 
         for i in tqdm(range(incoming_requests_arr_np.shape[0]), disable=True):
             row = incoming_requests_arr_np[i]
@@ -280,7 +277,7 @@ class write_buffer:
         self.append_to_trace_mat(force=True)
 
         if self.trace_matrix_empty:
-           return
+            return
 
         while self.drain_buf_start_line_id < self.trace_matrix.shape[0]:
             self.drain_end_cycle = self.empty_drain_buf(empty_start_cycle=cycle)

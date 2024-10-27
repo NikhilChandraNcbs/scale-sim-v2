@@ -4,8 +4,6 @@ the model and generates the data that goes inside the reports.
 """
 
 import os
-import ast
-import numpy as np
 from scalesim.compute.compression import compression as cp
 
 from scalesim.scale_config import scale_config as cfg
@@ -26,6 +24,7 @@ class single_layer_sim:
         __init__ method
         """
         self.layer_id = 0
+        self.dataflow = ''
         self.topo = topo()
         self.config = cfg()
 
@@ -138,7 +137,7 @@ class single_layer_sim:
         Method to calculate the storage occupied by the filter matrix and filter metadata when
         sparsity is enabled.
         """
-        if self.config.sparsity_support == True:
+        if self.config.sparsity_support is True:
             sparse_array_np = self.op_mat_obj.sparse_filter_array
             original_storage = 0
             new_storage = 0
@@ -216,7 +215,6 @@ class single_layer_sim:
                 ofmap_backing_bw = bws[0]
 
             else:
-                dataflow = self.config.get_dataflow()
                 arr_row, arr_col = self.config.get_array_dims()
                 estimate_bandwidth_mode = True
 
@@ -364,7 +362,7 @@ class single_layer_sim:
             self.calc_report_data()
 
 
-        if self.config.sparsity_support == True:
+        if self.config.sparsity_support is True:
             items = [self.avg_ifmap_sram_bw,
                      self.avg_filter_sram_bw,
                      self.avg_filter_metadata_sram_bw,

@@ -109,7 +109,7 @@ class simulator:
                 print('Mapping efficiency: ' + "{:.2f}".format(mapping_eff) +'%')
 
                 avg_bw_items = single_layer_obj.get_bandwidth_report_items()
-                if self.conf.sparsity_support == True:
+                if self.conf.sparsity_support is True:
                     avg_ifmap_sram_bw = avg_bw_items[0]
                     avg_filter_sram_bw = avg_bw_items[1]
                     avg_filter_metadata_sram_bw = avg_bw_items[2]
@@ -129,7 +129,7 @@ class simulator:
                       ' words/cycle')
                 print('Average Filter SRAM BW: ' + "{:.3f}".format(avg_filter_sram_bw) + \
                       ' words/cycle')
-                if self.conf.sparsity_support == True:
+                if self.conf.sparsity_support is True:
                     print('Average Filter Metadata SRAM BW: ' + \
                           "{:.3f}".format(avg_filter_metadata_sram_bw) + ' words/cycle')
                 print('Average OFMAP SRAM BW: ' + "{:.3f}".format(avg_ofmap_sram_bw) + \
@@ -170,7 +170,7 @@ class simulator:
 
         bandwidth_report_name = self.top_path + '/BANDWIDTH_REPORT.csv'
         bandwidth_report = open(bandwidth_report_name, 'w')
-        if self.conf.sparsity_support == True:
+        if self.conf.sparsity_support is True:
             header = ('LayerID, Avg IFMAP SRAM BW, Avg FILTER SRAM BW, Avg FILTER Metadata SRAM BW,'
                       ' Avg OFMAP SRAM BW, ')
         else:
@@ -189,7 +189,7 @@ class simulator:
         header += 'DRAM OFMAP Start Cycle, DRAM OFMAP Stop Cycle, DRAM OFMAP Writes,\n'
         detail_report.write(header)
 
-        if self.conf.sparsity_support == True:
+        if self.conf.sparsity_support is True:
             sparse_report_name = self.top_path + '/SPARSE_REPORT.csv'
             sparse_report = open(sparse_report_name, 'w')
             header = 'LayerID, '
@@ -220,7 +220,7 @@ class simulator:
             log += ',\n'
             detail_report.write(log)
 
-            if self.conf.sparsity_support == True:
+            if self.conf.sparsity_support is True:
                 sparse_report_items_this_layer = single_layer_obj.get_sparse_report_items()
                 log = str(lid) + ', ' + self.conf.sparsity_representation + ', '
                 log += ', '.join([str(x) for x in sparse_report_items_this_layer])
@@ -230,7 +230,7 @@ class simulator:
         compute_report.close()
         bandwidth_report.close()
         detail_report.close()
-        if self.conf.sparsity_support == True:
+        if self.conf.sparsity_support is True:
             sparse_report.close()
 
     #

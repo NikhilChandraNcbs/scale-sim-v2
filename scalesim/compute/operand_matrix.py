@@ -3,9 +3,7 @@ This file contains the 'operand_matrix' class responsible for creating the IFMAP
 operand matrices.
 """
 
-import math
 import numpy as np
-from tqdm import tqdm
 
 from scalesim.topology_utils import topologies as topoutil
 from scalesim.scale_config import scale_config as cfg
@@ -262,7 +260,7 @@ class operand_matrix(object):
 
         self.filter_addr_matrix = self.calc_filter_elem_addr(row_indices, col_indices)
 
-        if self.config.sparsity_support == True:
+        if self.config.sparsity_support is True:
             pattern = np.concatenate([np.ones(self.config.sparsity_N, dtype=int),
                                       np.zeros(self.config.sparsity_M - self.config.sparsity_N,
                                                dtype=int)])
@@ -397,7 +395,7 @@ class operand_matrix(object):
         # Anand: ISSUE #3. FIX
         #ret_mat = self.filter_addr_matrix[start_row: end_row][start_col: end_col]
         # ret_mat = self.filter_addr_matrix[start_row: end_row, start_col: end_col]
-        if self.config.sparsity_support == True:
+        if self.config.sparsity_support is True:
             ret_mat = self.filter_addr_matrix
         else:
             ret_mat = self.filter_addr_matrix[start_row: end_row, start_col: end_col]
@@ -448,7 +446,7 @@ class operand_matrix(object):
         end_col = start_col + num_cols
         # Anand: ISSUE #7. Patch
         #ret_mat = self.filter_addr_matrix[start_row: end_row, start_col: end_col]
-        if self.config.sparsity_support == True:
+        if self.config.sparsity_support is True:
             ret_mat =self.ofmap_addr_matrix
         else:
             ret_mat = self.ofmap_addr_matrix[start_row: end_row, start_col: end_col]
@@ -479,17 +477,16 @@ class operand_matrix(object):
 
 
 if __name__ == '__main__':
-    opmat = operand_matrix()
+    # opmat = operand_matrix()
     tutil = topoutil()
-    lid = 3
     topology_file = "../../topologies/mlperf/test.csv"
     tutil.load_arrays(topofile=topology_file)
-    for i in range(tutil.get_num_layers()):
-        layer_param_arr = tutil.get_layer_params(layer_id=i)
-        ofmap_dims = tutil.get_layer_ofmap_dims(layer_id=i)
+    for id in range(tutil.get_num_layers()):
+        layer_param_arr = tutil.get_layer_params(layer_id=id)
+        ofmap_dims = tutil.get_layer_ofmap_dims(layer_id=id)
         ofmap_px_filt = \
-            tutil.get_layer_num_ofmap_px(layer_id=i) / tutil.get_layer_num_filters(layer_id=i)
-        conv_window_size = tutil.get_layer_window_size(layer_id=i)
+            tutil.get_layer_num_ofmap_px(layer_id=id) / tutil.get_layer_num_filters(layer_id=id)
+        conv_window_size = tutil.get_layer_window_size(layer_id=id)
         layer_calc_hyper_param_arr = [ofmap_dims[0], ofmap_dims[1], ofmap_px_filt, conv_window_size]
         config_arr = [512, 512, 256, 8, 8]
         #[matrix_set, ifmap_addr_matrix, filter_addr_matrix, ofmap_addr_matrix] \

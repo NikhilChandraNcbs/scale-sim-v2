@@ -4,9 +4,9 @@ double buffered SRAMs.
 """
 
 import time
+import os
 import numpy as np
 from tqdm import tqdm
-import os
 
 from scalesim.memory.read_buffer import read_buffer as rdbuf
 from scalesim.memory.read_buffer_estimate_bw import ReadBufferEstimateBw as rdbuf_est
@@ -66,7 +66,7 @@ class double_buffered_scratchpad:
         self.ofmap_dram_stop_cycle = 0
         self.ofmap_dram_writes = 0
 
-        self.estimate_bandwidth_mode = False,
+        self.estimate_bandwidth_mode = False
         self.traces_valid = False
         self.params_valid_flag = True
 
@@ -264,6 +264,7 @@ class double_buffered_scratchpad:
     # Anand: This is too complex, perform the serve cycle by cycle for the requests
     def service_memory_requests_old(self, ifmap_demand_mat, filter_demand_mat, ofmap_demand_mat):
         """
+        This is the trace computation logic of this memory system.
         """
         # TODO: assert sanity check
         assert self.params_valid_flag, 'Memories not initialized yet'
@@ -393,17 +394,17 @@ class double_buffered_scratchpad:
             pbar.update(num_lines)
             # Cutoff at 0
             ofmap_lines_remaining = max(ofmap_demand_mat.shape[0] - (end_line_idx + 1), 0)
-            #print("DEBUG: " + str(end_line_idx))
+            # print("DEBUG: " + str(end_line_idx))
 
             if end_line_idx > ofmap_demand_mat.shape[0]:
                 print('Trap')
 
-            #if int(ofmap_lines_remaining % 1000) == 0:
-            #    print("DEBUG: " + str(ofmap_lines_remaining))
+            # if int(ofmap_lines_remaining % 1000) == 0:
+            #     print("DEBUG: " + str(ofmap_lines_remaining))
 
-            loop_end_time = time.time()
-            loop_time = loop_end_time - loop_start_time
-            #print('DEBUG: Time taken in one iteration: ' + str(loop_time))
+            # loop_end_time = time.time()
+            # loop_time = loop_end_time - loop_start_time
+            # print('DEBUG: Time taken in one iteration: ' + str(loop_time))
 
         # At this stage there might still be some data in the active buffer of the OFMAP scratchpad
         # The following drains it and generates the OFMAP

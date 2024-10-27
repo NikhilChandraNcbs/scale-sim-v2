@@ -36,7 +36,7 @@ class read_buffer:
         self.req_gen_bandwidth = 100            # words per cycle
 
         # Status of the buffer
-        self.hashed_buffer = dict()
+        self.hashed_buffer = {}
         self.num_lines = 0
         self.num_active_buf_lines = 1
         self.num_prefetch_buf_lines = 1
@@ -106,7 +106,7 @@ class read_buffer:
         self.req_gen_bandwidth = 100  # words per cycle
 
         # Status of the buffer
-        self.hashed_buffer = dict()
+        self.hashed_buffer = {}
         self.active_buffer_set_limits = []
         self.prefetch_buffer_set_limits = []
 

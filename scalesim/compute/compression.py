@@ -5,8 +5,8 @@ obtain the Filter and Metadata storages along with original storage for all the 
 mentioned.
 """
 
-import numpy as np
 import math
+import numpy as np
 
 class compression:
     """

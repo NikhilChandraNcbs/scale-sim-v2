@@ -32,6 +32,7 @@ class scalesim:
         # File paths
         self.config_file = ''
         self.topology_file = ''
+        self.top_path = ''
 
         # Member objects
         #self.runner = r.run_nets()
@@ -54,7 +55,7 @@ class scalesim:
         Set or update the paths to the scalesim input files.
         """
         # First check if the user provided a valid topology file
-        if not topology_filename == '':
+        if topology_filename != '':
             if not os.path.exists(topology_filename):
                 print("ERROR: scalesim.scale.py: Topology file not found")
                 print("Input file:" + topology_filename)

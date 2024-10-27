@@ -4,8 +4,6 @@ activities such as parsing the config file, writing the parameters into a config
 parameters.
 """
 import configparser as cp
-import os
-import sys
 
 
 class scale_config:

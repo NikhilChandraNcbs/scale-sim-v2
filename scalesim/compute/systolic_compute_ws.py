@@ -230,7 +230,7 @@ class systolic_compute_ws:
 
         metadata_conversion_mat = [ [ ] ]
         if False:
-            if self.config.sparsity_support == True:
+            if self.config.sparsity_support is True:
                 if self.config.sparsity_representation == 'csr':
                     metadata_conversion_mat = np.ones((1, self.arr_col)) * -1
                 elif self.config.sparsity_representation == 'csc':
@@ -278,7 +278,7 @@ class systolic_compute_ws:
         self.ifmap_demand_matrix = np.concatenate(ifmap_demand_matrix_list)
 
         if False:
-            if self.config.sparsity_support == True:
+            if self.config.sparsity_support is True:
                 self.ifmap_demand_matrix = \
                     np.concatenate((metadata_conversion_mat, self.ifmap_demand_matrix), axis=0)
 
@@ -296,7 +296,7 @@ class systolic_compute_ws:
 
         metadata_conversion_mat = [ [ ] ]
         if False:
-            if self.config.sparsity_support == True:
+            if self.config.sparsity_support is True:
                 if self.config.sparsity_representation == 'csr':
                     metadata_conversion_mat = np.ones((1, self.arr_col)) * -1
                 elif self.config.sparsity_representation == 'csc':
@@ -365,7 +365,7 @@ class systolic_compute_ws:
         self.filter_demand_matrix = np.concatenate(filter_demand_matrix_list)
 
         if False:
-            if self.config.sparsity_support == True:
+            if self.config.sparsity_support is True:
                 self.filter_demand_matrix = \
                     np.concatenate((metadata_conversion_mat, self.filter_demand_matrix), axis=0)
 
@@ -383,7 +383,7 @@ class systolic_compute_ws:
 
         metadata_conversion_mat = [ [ ] ]
         if False:
-            if self.config.sparsity_support == True:
+            if self.config.sparsity_support is True:
                 if self.config.sparsity_representation == 'csr':
                     metadata_conversion_mat = np.ones((1, self.arr_col)) * -1
                 elif self.config.sparsity_representation == 'csc':
@@ -427,7 +427,7 @@ class systolic_compute_ws:
         self.ofmap_demand_matrix = np.concatenate(ofmap_demand_matrix_list)
 
         if False:
-            if self.config.sparsity_support == True:
+            if self.config.sparsity_support is True:
                 self.ofmap_demand_matrix = \
                     np.concatenate((metadata_conversion_mat, self.ofmap_demand_matrix), axis=0)
 

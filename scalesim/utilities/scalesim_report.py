@@ -1,3 +1,8 @@
+"""
+This file contains the class 'ScalesimReport' containing the utility functions to read the report
+data.
+"""
+
 import pandas as pd
 
 

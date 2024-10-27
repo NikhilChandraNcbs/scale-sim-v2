@@ -3,8 +3,6 @@ Dummy memory like interface to service the requests of the last level memory.
 """
 
 # This is shell module to ensure continuity
-import numpy as np
-
 
 class write_port:
     """

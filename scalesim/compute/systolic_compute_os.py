@@ -6,7 +6,6 @@ for IFMAP, Filter, and OFMAP operations.
 """
 
 import math
-import time
 import numpy as np
 from tqdm import tqdm
 from scalesim.scale_config import scale_config as cfg

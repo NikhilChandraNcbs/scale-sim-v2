@@ -3,9 +3,6 @@ This file contains the 'topologies' class that handles the topology files fed to
 """
 
 import math
-import ast
-import numpy as np
-import os
 
 
 class topologies(object):
@@ -27,6 +24,9 @@ class topologies(object):
         self.topo_load_flag = False
         self.topo_calc_hyper_param_flag = False
         self.topo_calc_spatiotemp_params_flag = False
+        self.df = ""
+        self.current_toponame = ""
+        self.layer_name = ""
 
     # reset topology parameters
     def reset(self):
@@ -41,6 +41,9 @@ class topologies(object):
         self.num_layers = 0
         self.topo_calc_hyper_param_flag = False
         self.layers_calculated_hyperparams = []
+        self.df = ""
+        self.current_toponame = ""
+        self.layer_name = ""
 
     #
     def load_layer_params_from_list(self, layer_name, elems_list=[]):
@@ -234,7 +237,7 @@ class topologies(object):
         """
         assert len(entry) == 9, 'Incorrect number of parameters'
 
-        if not toponame == "":
+        if toponame != "":
             self.current_topo_name = toponame
 
         self.topo_arrays.append(entry)
