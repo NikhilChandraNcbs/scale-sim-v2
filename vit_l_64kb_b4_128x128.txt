@@ -1,0 +1,200 @@
+====================================================
+******************* SCALE SIM **********************
+====================================================
+Array Size: 	128x128
+SRAM IFMAP (kB): 	64
+SRAM Filter (kB): 	64
+SRAM OFMAP (kB): 	64
+Dataflow: 	Weight Stationary
+CSV file path: 	topologies/sparsity/vit_l.csv
+Bandwidth: 	50
+Working in USE USER BANDWIDTH mode.
+====================================================
+
+Running Layer 0
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+Compute cycles: 900799
+Stall cycles: 896176
+Overall utilization: 0.26%
+Mapping efficiency: 58.20%
+Average IFMAP SRAM BW: 1.469 words/cycle
+Average Filter SRAM BW: 0.109 words/cycle
+Average Filter Metadata SRAM BW: 0.010 words/cycle
+Average OFMAP SRAM BW: 0.167 words/cycle
+Average IFMAP DRAM BW: 49.924 words/cycle
+Average Filter DRAM BW: 49.931 words/cycle
+Average OFMAP DRAM BW: 0.214 words/cycle
+
+Running Layer 1
+784 8
+784 8
+784 8
+784 8
+784 8
+784 8
+784 8
+Compute cycles: 12786
+Stall cycles: 4625
+Overall utilization: 18.78%
+Mapping efficiency: 16.55%
+Average IFMAP SRAM BW: 255.359 words/cycle
+Average Filter SRAM BW: 1.962 words/cycle
+Average Filter Metadata SRAM BW: 0.184 words/cycle
+Average OFMAP SRAM BW: 48.073 words/cycle
+Average IFMAP DRAM BW: 49.928 words/cycle
+Average Filter DRAM BW: 50.000 words/cycle
+Average OFMAP DRAM BW: 48.384 words/cycle
+
+Running Layer 2
+784 8
+784 8
+784 8
+784 8
+Compute cycles: 39029584
+Stall cycles: 39024921
+Overall utilization: 0.01%
+Mapping efficiency: 28.11%
+Average IFMAP SRAM BW: 0.048 words/cycle
+Average Filter SRAM BW: 0.001 words/cycle
+Average Filter Metadata SRAM BW: 0.000 words/cycle
+Average OFMAP SRAM BW: 0.005 words/cycle
+Average IFMAP DRAM BW: 49.924 words/cycle
+Average Filter DRAM BW: 50.000 words/cycle
+Average OFMAP DRAM BW: 0.007 words/cycle
+
+Running Layer 3
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8

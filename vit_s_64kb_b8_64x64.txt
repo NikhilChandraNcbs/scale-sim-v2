@@ -1,0 +1,260 @@
+====================================================
+******************* SCALE SIM **********************
+====================================================
+Array Size: 	64x64
+SRAM IFMAP (kB): 	64
+SRAM Filter (kB): 	64
+SRAM OFMAP (kB): 	64
+Dataflow: 	Weight Stationary
+CSV file path: 	topologies/sparsity/vit_s.csv
+Bandwidth: 	50
+Working in USE USER BANDWIDTH mode.
+====================================================
+
+Running Layer 0
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+Compute cycles: 19467
+Stall cycles: 15994
+Overall utilization: 18.12%
+Mapping efficiency: 63.02%
+Average IFMAP SRAM BW: 61.307 words/cycle
+Average Filter SRAM BW: 1.894 words/cycle
+Average Filter Metadata SRAM BW: 0.178 words/cycle
+Average OFMAP SRAM BW: 5.799 words/cycle
+Average IFMAP DRAM BW: 49.926 words/cycle
+Average Filter DRAM BW: 50.000 words/cycle
+Average OFMAP DRAM BW: 7.265 words/cycle
+
+Running Layer 1
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+Compute cycles: 7333
+Stall cycles: 0
+Overall utilization: 49.11%
+Mapping efficiency: 30.37%
+Average IFMAP SRAM BW: 343.591 words/cycle
+Average Filter SRAM BW: 5.132 words/cycle
+Average Filter Metadata SRAM BW: 0.481 words/cycle
+Average OFMAP SRAM BW: 31.433 words/cycle
+Average IFMAP DRAM BW: 50.000 words/cycle
+Average Filter DRAM BW: 50.000 words/cycle
+Average OFMAP DRAM BW: 36.552 words/cycle
+
+Running Layer 2
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+Compute cycles: 222631
+Stall cycles: 218772
+Overall utilization: 1.62%
+Mapping efficiency: 58.14%
+Average IFMAP SRAM BW: 5.956 words/cycle
+Average Filter SRAM BW: 0.170 words/cycle
+Average Filter Metadata SRAM BW: 0.016 words/cycle
+Average OFMAP SRAM BW: 0.563 words/cycle
+Average IFMAP DRAM BW: 49.924 words/cycle
+Average Filter DRAM BW: 50.000 words/cycle
+Average OFMAP DRAM BW: 0.754 words/cycle
+
+Running Layer 3
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+Compute cycles: 181390
+Stall cycles: 153599
+Overall utilization: 15.56%
+Mapping efficiency: 62.55%
+Average IFMAP SRAM BW: 52.637 words/cycle
+Average Filter SRAM BW: 1.626 words/cycle
+Average Filter Metadata SRAM BW: 0.152 words/cycle
+Average OFMAP SRAM BW: 4.979 words/cycle
+Average IFMAP DRAM BW: 49.924 words/cycle
+Average Filter DRAM BW: 49.925 words/cycle
+Average OFMAP DRAM BW: 5.087 words/cycle
+
+Running Layer 4
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+196 32
+Compute cycles: 597129
+Stall cycles: 569338
+Overall utilization: 4.73%
+Mapping efficiency: 60.74%
+Average IFMAP SRAM BW: 15.989 words/cycle
+Average Filter SRAM BW: 0.494 words/cycle
+Average Filter Metadata SRAM BW: 0.046 words/cycle
+Average OFMAP SRAM BW: 1.513 words/cycle
+Average IFMAP DRAM BW: 49.924 words/cycle
+Average Filter DRAM BW: 49.925 words/cycle
+Average OFMAP DRAM BW: 1.563 words/cycle
+************ SCALE SIM Run Complete ****************

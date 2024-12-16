@@ -1,0 +1,6 @@
+LayerID, Sparsity Representation, Original Filter Storage, New Storage (Filter+Metadata), Filter Metadata Storage, Avg FILTER Metadata SRAM BW, 
+0, ellpack_block, 73728, 40320.0, 3456.0, 0.17753120665742025,
+1, ellpack_block, 75264, 41160.0, 3528.0, 0.4811127778535388,
+2, ellpack_block, 75264, 41440.0, 3552.0, 0.015954651418715275,
+3, ellpack_block, 589824, 322560.0, 27648.0, 0.1524229560615249,
+4, ellpack_block, 589824, 322560.0, 27648.0, 0.04630155293077375,

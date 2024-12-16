@@ -1,0 +1,243 @@
+====================================================
+******************* SCALE SIM **********************
+====================================================
+Array Size: 	128x128
+SRAM IFMAP (kB): 	64
+SRAM Filter (kB): 	64
+SRAM OFMAP (kB): 	64
+Dataflow: 	Weight Stationary
+CSV file path: 	topologies/sparsity/vit_b.csv
+Bandwidth: 	50
+Working in USE USER BANDWIDTH mode.
+====================================================
+
+Running Layer 0
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+Compute cycles: 211443
+Stall cycles: 207976
+Overall utilization: 0.83%
+Mapping efficiency: 56.45%
+Average IFMAP SRAM BW: 4.693 words/cycle
+Average Filter SRAM BW: 0.349 words/cycle
+Average Filter Metadata SRAM BW: 0.033 words/cycle
+Average OFMAP SRAM BW: 0.534 words/cycle
+Average IFMAP DRAM BW: 49.924 words/cycle
+Average Filter DRAM BW: 49.962 words/cycle
+Average OFMAP DRAM BW: 0.772 words/cycle
+
+Running Layer 1
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+Compute cycles: 5779
+Stall cycles: 0
+Overall utilization: 15.58%
+Mapping efficiency: 16.93%
+Average IFMAP SRAM BW: 286.167 words/cycle
+Average Filter SRAM BW: 6.512 words/cycle
+Average Filter Metadata SRAM BW: 0.610 words/cycle
+Average OFMAP SRAM BW: 39.885 words/cycle
+Average IFMAP DRAM BW: 50.000 words/cycle
+Average Filter DRAM BW: 50.000 words/cycle
+Average OFMAP DRAM BW: 47.601 words/cycle
+
+Running Layer 2
+196 8
+196 8
+196 8
+196 8
+196 8
+Compute cycles: 1008821
+Stall cycles: 1005932
+Overall utilization: 0.09%
+Mapping efficiency: 35.53%
+Average IFMAP SRAM BW: 0.820 words/cycle
+Average Filter SRAM BW: 0.037 words/cycle
+Average Filter Metadata SRAM BW: 0.003 words/cycle
+Average OFMAP SRAM BW: 0.062 words/cycle
+Average IFMAP DRAM BW: 49.924 words/cycle
+Average Filter DRAM BW: 50.000 words/cycle
+Average OFMAP DRAM BW: 0.213 words/cycle
+
+Running Layer 3
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+Compute cycles: 2538497
+Stall cycles: 2496882
+Overall utilization: 1.11%
+Mapping efficiency: 74.77%
+Average IFMAP SRAM BW: 4.691 words/cycle
+Average Filter SRAM BW: 0.465 words/cycle
+Average Filter Metadata SRAM BW: 0.044 words/cycle
+Average OFMAP SRAM BW: 0.712 words/cycle
+Average IFMAP DRAM BW: 49.924 words/cycle
+Average Filter DRAM BW: 49.924 words/cycle
+Average OFMAP DRAM BW: 0.730 words/cycle
+
+Running Layer 4
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+196 8
+Compute cycles: 15306999
+Stall cycles: 15265384
+Overall utilization: 0.18%
+Mapping efficiency: 74.02%
+Average IFMAP SRAM BW: 0.778 words/cycle
+Average Filter SRAM BW: 0.077 words/cycle
+Average Filter Metadata SRAM BW: 0.007 words/cycle
+Average OFMAP SRAM BW: 0.118 words/cycle
+Average IFMAP DRAM BW: 49.924 words/cycle
+Average Filter DRAM BW: 49.924 words/cycle
+Average OFMAP DRAM BW: 0.121 words/cycle
+************ SCALE SIM Run Complete ****************
