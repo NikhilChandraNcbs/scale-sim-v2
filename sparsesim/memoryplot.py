@@ -136,19 +136,20 @@ def plot_combined_storage_style1(layers, dense_storage, sparse_filter_1s4, spars
     ax.bar(index + 3 * bar_width, sparse_metadata_3s4, bar_width, bottom=sparse_filter_3s4, label='Sparse Metadata (3:4)', color=color_sparse_metadata_3s4, edgecolor='black')
 
     # Labels, title, legend
-    ax.set_xlabel('Layers')
-    ax.set_ylabel('Memory Size (Words)')
+    ax.set_xlabel('Layers', fontsize=14)
+    ax.set_ylabel('Memory Size (Words)', fontsize=14)
     ax.set_title(f'{title_prefix}: Memory Storage Comparison: Dense vs 1:4 vs 2:4 vs 3:4')
     ax.set_xticks(index + bar_width)
-    ax.set_xticklabels(layers, rotation=45, ha="right")
+    ax.set_xticklabels(layers, rotation=45, ha="right", fontsize=12)
     ax.legend()
 
     plt.tight_layout()
-    plt.show()
+    plt.savefig('memoryplot1.png', dpi=300, bbox_inches='tight', format='png')
+    # plt.show()
 
 # Function to plot the stacked bar chart with better colors and hatching
 def plot_combined_storage_style2(layers, dense_storage, sparse_filter_1s4, sparse_metadata_1s4, sparse_filter_2s4, sparse_metadata_2s4, title_prefix):
-    fig, ax = plt.subplots(figsize=(12, 6))
+    fig, ax = plt.subplots(figsize=(18, 9))
 
     # Set the positions and width for the bars
     bar_width = 0.2
@@ -177,7 +178,8 @@ def plot_combined_storage_style2(layers, dense_storage, sparse_filter_1s4, spars
     ax.legend()
 
     plt.tight_layout()
-    plt.show()
+    plt.savefig('memoryplot2.png', dpi=300, bbox_inches='tight', format='png')
+    # plt.show()
 
 
 model = 'Resnet18'

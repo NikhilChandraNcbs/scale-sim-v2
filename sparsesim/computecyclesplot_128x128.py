@@ -147,7 +147,8 @@ def plot_cycles(on_chip_memory_sizes, cycles_dict, conv_groups):
     plt.title("Total Compute Cycles vs On-Chip Memory (Scatter and Error Plots)")
     plt.legend()
     plt.grid(True)
-    plt.show()
+    plt.savefig('computecyclesplot.png', dpi=300, bbox_inches='tight', format='png')
+    # plt.show()
 
 def plot_cycles_new(on_chip_memory_sizes, cycles_dict, conv_groups):
     # Set up figure
@@ -175,7 +176,8 @@ def plot_cycles_new(on_chip_memory_sizes, cycles_dict, conv_groups):
     plt.title("Total Compute Cycles vs On-Chip Memory (Scatter and Error Plots)")
     plt.legend()
     plt.grid(True)
-    plt.show()
+    plt.savefig('computecyclesplotnew.png', dpi=300, bbox_inches='tight', format='png')
+    # plt.show()
 
 if __name__ == '__main__':
     models = ['Resnet18'] # ['resnet18', 'alexnet']
