@@ -1,0 +1,73 @@
+====================================================
+******************* SCALE SIM **********************
+====================================================
+Array Size: 	128x128
+SRAM IFMAP (kB): 	64
+SRAM Filter (kB): 	64
+SRAM OFMAP (kB): 	64
+Dataflow: 	Weight Stationary
+CSV file path: 	topologies/sparsity/vit_b.csv
+Bandwidth: 	50
+Working in USE USER BANDWIDTH mode.
+====================================================
+
+Running Layer 0
+Compute cycles: 24679
+Stall cycles: 17744
+Overall utilization: 7.15%
+Mapping efficiency: 75.00%
+Average IFMAP SRAM BW: 12.199 words/cycle
+Average Filter SRAM BW: 5.975 words/cycle
+Average OFMAP SRAM BW: 9.149 words/cycle
+Average IFMAP DRAM BW: 49.926 words/cycle
+Average Filter DRAM BW: 49.926 words/cycle
+Average OFMAP DRAM BW: 10.620 words/cycle
+
+Running Layer 1
+Compute cycles: 6832
+Stall cycles: 1053
+Overall utilization: 13.18%
+Mapping efficiency: 45.94%
+Average IFMAP SRAM BW: 18.361 words/cycle
+Average Filter SRAM BW: 11.016 words/cycle
+Average OFMAP SRAM BW: 33.738 words/cycle
+Average IFMAP DRAM BW: 50.000 words/cycle
+Average Filter DRAM BW: 49.935 words/cycle
+Average OFMAP DRAM BW: 39.103 words/cycle
+
+Running Layer 2
+Compute cycles: 28065
+Stall cycles: 22286
+Overall utilization: 3.21%
+Mapping efficiency: 45.94%
+Average IFMAP SRAM BW: 8.213 words/cycle
+Average Filter SRAM BW: 2.682 words/cycle
+Average OFMAP SRAM BW: 4.470 words/cycle
+Average IFMAP DRAM BW: 49.926 words/cycle
+Average Filter DRAM BW: 49.935 words/cycle
+Average OFMAP DRAM BW: 5.567 words/cycle
+
+Running Layer 3
+Compute cycles: 3639430
+Stall cycles: 3556199
+Overall utilization: 0.78%
+Mapping efficiency: 100.00%
+Average IFMAP SRAM BW: 0.993 words/cycle
+Average Filter SRAM BW: 0.648 words/cycle
+Average OFMAP SRAM BW: 0.993 words/cycle
+Average IFMAP DRAM BW: 49.924 words/cycle
+Average Filter DRAM BW: 49.924 words/cycle
+Average OFMAP DRAM BW: 0.994 words/cycle
+
+Running Layer 4
+Compute cycles: 3639430
+Stall cycles: 3556199
+Overall utilization: 0.78%
+Mapping efficiency: 100.00%
+Average IFMAP SRAM BW: 0.993 words/cycle
+Average Filter SRAM BW: 0.648 words/cycle
+Average OFMAP SRAM BW: 0.993 words/cycle
+Average IFMAP DRAM BW: 49.924 words/cycle
+Average Filter DRAM BW: 49.924 words/cycle
+Average OFMAP DRAM BW: 0.997 words/cycle
+************ SCALE SIM Run Complete ****************

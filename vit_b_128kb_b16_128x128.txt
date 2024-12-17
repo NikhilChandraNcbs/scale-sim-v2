@@ -1,0 +1,243 @@
+====================================================
+******************* SCALE SIM **********************
+====================================================
+Array Size: 	128x128
+SRAM IFMAP (kB): 	128
+SRAM Filter (kB): 	128
+SRAM OFMAP (kB): 	128
+Dataflow: 	Weight Stationary
+CSV file path: 	topologies/sparsity/vit_b.csv
+Bandwidth: 	50
+Working in USE USER BANDWIDTH mode.
+====================================================
+
+Running Layer 0
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+Compute cycles: 29877
+Stall cycles: 26410
+Overall utilization: 5.90%
+Mapping efficiency: 43.12%
+Average IFMAP SRAM BW: 132.845 words/cycle
+Average Filter SRAM BW: 2.468 words/cycle
+Average Filter Metadata SRAM BW: 0.231 words/cycle
+Average OFMAP SRAM BW: 3.779 words/cycle
+Average IFMAP DRAM BW: 49.964 words/cycle
+Average Filter DRAM BW: 50.000 words/cycle
+Average OFMAP DRAM BW: 5.014 words/cycle
+
+Running Layer 1
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+Compute cycles: 5779
+Stall cycles: 0
+Overall utilization: 15.58%
+Mapping efficiency: 13.03%
+Average IFMAP SRAM BW: 1144.669 words/cycle
+Average Filter SRAM BW: 6.512 words/cycle
+Average Filter Metadata SRAM BW: 0.610 words/cycle
+Average OFMAP SRAM BW: 39.885 words/cycle
+Average IFMAP DRAM BW: 50.000 words/cycle
+Average Filter DRAM BW: 50.000 words/cycle
+Average OFMAP DRAM BW: 47.398 words/cycle
+
+Running Layer 2
+196 128
+196 128
+196 128
+196 128
+196 128
+Compute cycles: 33156
+Stall cycles: 30267
+Overall utilization: 2.72%
+Mapping efficiency: 23.94%
+Average IFMAP SRAM BW: 99.756 words/cycle
+Average Filter SRAM BW: 1.143 words/cycle
+Average Filter Metadata SRAM BW: 0.107 words/cycle
+Average OFMAP SRAM BW: 1.892 words/cycle
+Average IFMAP DRAM BW: 49.963 words/cycle
+Average Filter DRAM BW: 50.000 words/cycle
+Average OFMAP DRAM BW: 49.976 words/cycle
+
+Running Layer 3
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+Compute cycles: 361851
+Stall cycles: 320236
+Overall utilization: 7.80%
+Mapping efficiency: 56.41%
+Average IFMAP SRAM BW: 131.624 words/cycle
+Average Filter SRAM BW: 3.260 words/cycle
+Average Filter Metadata SRAM BW: 0.306 words/cycle
+Average OFMAP SRAM BW: 4.992 words/cycle
+Average IFMAP DRAM BW: 49.962 words/cycle
+Average Filter DRAM BW: 49.962 words/cycle
+Average OFMAP DRAM BW: 5.099 words/cycle
+
+Running Layer 4
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+196 128
+Compute cycles: 1799076
+Stall cycles: 1757461
+Overall utilization: 1.57%
+Mapping efficiency: 57.19%
+Average IFMAP SRAM BW: 26.474 words/cycle
+Average Filter SRAM BW: 0.656 words/cycle
+Average Filter Metadata SRAM BW: 0.061 words/cycle
+Average OFMAP SRAM BW: 1.004 words/cycle
+Average IFMAP DRAM BW: 49.962 words/cycle
+Average Filter DRAM BW: 49.962 words/cycle
+Average OFMAP DRAM BW: 1.034 words/cycle
+************ SCALE SIM Run Complete ****************

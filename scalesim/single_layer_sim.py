@@ -258,9 +258,9 @@ class single_layer_sim:
                                                         ifmap_prefetch_mat=ifmap_prefetch_mat,
                                                         filter_prefetch_mat=filter_prefetch_mat
                                                              )
-        self.memory_system.service_memory_requests(ifmap_demand_mat,
-                                                    filter_demand_mat,
-                                                    ofmap_demand_mat)
+        # self.memory_system.service_memory_requests(ifmap_demand_mat,
+        #                                             filter_demand_mat,
+        #                                             ofmap_demand_mat)
 
         self.runs_ready = True
 

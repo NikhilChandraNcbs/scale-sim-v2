@@ -1,0 +1,3 @@
+ERROR: scalesim.scale.py: Config file not found
+Input file:configs/vit_cfgs/vit_s_256kb_dense_64x64.cfg
+Exiting
