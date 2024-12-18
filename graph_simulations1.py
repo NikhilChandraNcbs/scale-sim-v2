@@ -268,19 +268,22 @@ def plot_results_combined(csv_file1, csv_file2, output_filename):
     plt.yticks(fontsize=12)
     plt.xlabel("Sparsity Ratios", fontsize=16, labelpad=20)
     plt.ylabel("Compute Cycles", fontsize=16)
-    plt.title("Compute Cycles Variation", fontsize=14)
+    plt.title("Compute Cycles Variation for GEMM M,N,K = 1000,1000,1000", fontsize=14)
     plt.yscale("log")  # Logarithmic Y-axis
 
     # Increase bottom margin to accommodate array size labels
-    plt.subplots_adjust(bottom=0.2)
+    plt.subplots_adjust(bottom=0.3)
 
     # Print array size labels centered below each group
     for position, label in array_labels_positions:
-        plt.text(position, min(min(d.values()) for d in (data1.values())) * 0.3, label,
-                 ha='center', va='top', fontsize=12, fontweight='bold')
+        plt.text(position, min(min(d.values()) for d in (data1.values())) * 0.4, label,
+                 ha='center', va='top', fontsize=12, fontweight='bold', color='tab:blue', alpha=0.5)
+    for position, label in array_labels_positions:
+        plt.text(position, min(min(d.values()) for d in (data1.values())) * 0.33, "32x32",
+                 ha='center', va='top', fontsize=12, fontweight='bold', color='tab:blue')
 
     # Add legend
-    plt.legend(["M,N,K = 256,512,768", "M,N,K = 1000,1000,1000"], fontsize=12)
+    plt.legend(["Variable PE array with blocksize = PE array dimension", "Fixed 32x32 with variable block sizes = 4,8,16,32"], fontsize=14)
 
     plt.tight_layout()
     plt.savefig(output_filename)
