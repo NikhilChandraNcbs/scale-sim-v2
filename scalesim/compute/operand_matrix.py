@@ -311,12 +311,15 @@ class operand_matrix(object):
                 # print(self.sparse_filter_array)
 
             else:
+                '''
                 ratio_M = self.config.sparsity_block_size
                 # print("else part")
                 # print(ratio_M)
                 num_repeats = (self.filter_addr_matrix.shape[0] + ratio_M - 1) // ratio_M
                 # print(num_repeats)
                 columns = []
+                ratio_percentages = self.config.ratio_percentages
+                assert 1==0, "STOP"
                 for col_idx in range(self.filter_addr_matrix.shape[1]):
                     ratio_N = np.random.randint(1, ratio_M // 2 + 1)
                     # print(ratio_N)
@@ -328,6 +331,42 @@ class operand_matrix(object):
                     columns.append(column_values)
                 self.sparse_filter_array = np.column_stack(columns)
                 # print(self.sparse_filter_array)
+                '''
+                # import numpy as np
+
+                # Assuming this code is inside a method
+                ratio_M = self.config.sparsity_block_size
+                ratio_percentages = self.config.ratio_percentages  # e.g., "10,20,30,40"
+                num_columns = self.filter_addr_matrix.shape[1]
+                num_repeats = (self.filter_addr_matrix.shape[0] + ratio_M - 1) // ratio_M
+                columns = []
+
+                # Calculate the number of columns for each N based on percentages
+                N_values = list(range(1, ratio_M // 2 + 1))  # Valid N values: 1 to M/2
+                column_counts = [num_columns * p // 100 for p in ratio_percentages]
+
+                # Adjust for rounding errors to ensure total columns match
+                column_counts[-1] += num_columns - sum(column_counts)
+
+                # Verify consistency
+                assert sum(column_counts) == num_columns, "The total number of columns is inconsistent!"
+                print("column_counts:", column_counts)
+
+                # Generate columns for each N
+                for N, count in zip(N_values, column_counts):
+                    for _ in range(count):
+                        # Generate the sparsity pattern for N:M
+                        pattern = np.concatenate([np.ones(N, dtype=int), np.zeros(ratio_M - N, dtype=int)])
+                        column_values = np.tile(pattern, num_repeats)[:self.filter_addr_matrix.shape[0]]
+                        columns.append(column_values)
+
+                # Stack the columns to form the sparse filter array
+                self.sparse_filter_array = np.column_stack(columns)
+
+                with np.printoptions(threshold=np.inf, linewidth=200, suppress=True):
+                    print(self.sparse_filter_array)
+                # assert 1==0, "STOP"
+
 
             self.filter_addr_matrix = np.multiply(self.filter_addr_matrix, self.sparse_filter_array)
             # print("filter matrix after multiplying")
