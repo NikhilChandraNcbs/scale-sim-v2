@@ -1,5 +1,5 @@
 """
-This file shall be used for studies related to layer-wise sparsity - with M in N:M = array height
+This file shall be used for studies related to layer-wise sparsity - variation of block size
 """
 
 import os
@@ -89,7 +89,8 @@ def main():
             
             # Generate the simulation command
             command = scalesim_command_template.format(
-                cfg_file=cfg_filepath,
+                # cfg_file=cfg_filepath,
+                cfg_file=os.path.join(cfg_path, f"lws_32x32.cfg"),
                 csv_file=csv_filepath,
                 results_path=results_path
             )
@@ -97,6 +98,9 @@ def main():
 
     # Execute commands if enabled
     if execute_commands:
+        # for command in commands:
+        #     print(command) 
+        # assert 1==0, "BLIM"
         print("\nExecuting Commands...\n")
         for command, array_size, sparsity_ratio in commands:
             print(f"Executing: {command}")
@@ -128,7 +132,7 @@ def main():
     # Generate graphs if enabled
     if generate_graphs:
         # plot_results(output_csv_path)
-        plot_results_combined("output_results1.csv", "output_results7.csv", "overlapping_compute_cycles.png")
+        plot_results_combined("output_results7.csv", "output_results8.csv", "overlapping_compute_cycles.png")
 
 # Function to plot results
 def plot_results(output_csv_path):
@@ -182,16 +186,16 @@ def plot_results(output_csv_path):
     plt.yticks(fontsize=12)
     plt.xlabel("Sparsity Ratios", fontsize=16, labelpad=20)  # Add x-axis label with padding
     plt.ylabel("Compute Cycles", fontsize=16)
-    plt.title("GEMM M,N,K = 1000,1000,1000: Compute Cycles vs Array Sizes and Sparsity Ratios", fontsize=14)
+    plt.title("GEMM M,N,K = 1000,1000,1000: Compute Cycles vs Sparsity Ratios and Block Sizes for a 32x32 PE Array", fontsize=14)
     plt.yscale("log")  # Logarithmic Y-axis
 
     # Increase bottom margin to accommodate array size labels
     plt.subplots_adjust(bottom=0.2)
 
-    # Print array size labels centered below each group
-    for position, label in array_labels_positions:
-        plt.text(position, min(min(d.values()) for d in data.values()) * 0.4, label,
-                 ha='center', va='top', fontsize=12, fontweight='bold')
+    # # Print array size labels centered below each group
+    # for position, label in array_labels_positions:
+    #     plt.text(position, min(min(d.values()) for d in data.values()) * 0.4, label,
+    #              ha='center', va='top', fontsize=12, fontweight='bold')
 
     plt.tight_layout()
     plt.savefig("lws_compute_cycles_plot.png")
@@ -244,9 +248,9 @@ def plot_results_combined(csv_file1, csv_file2, output_filename):
 
         for sr in sparsity_ratios:
             # Bars for output_results1.csv (front side)
-            plt.bar(current_x, data1[array_size][sr], width=bar_width, color='tab:blue', label="File 1" if current_x == 0 else "")
+            plt.bar(current_x, data1[array_size][sr], width=bar_width, color='tab:blue', alpha=0.5, label="File 1" if current_x == 0 else "")
             # Bars for output_results7.csv (back side, slightly transparent)
-            plt.bar(current_x, data2[array_size][sr], width=bar_width, color='tab:gray', alpha=0.5, label="File 7" if current_x == 0 else "")
+            plt.bar(current_x, data2[array_size][sr], width=bar_width, color='tab:blue', label="File 2" if current_x == 0 else "")
             x_positions.append(current_x)
             sparsity_labels.append(sr)
             current_x += bar_width  # Move to next position
