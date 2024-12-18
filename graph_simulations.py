@@ -1,6 +1,8 @@
 import os
 import subprocess
 import csv
+import matplotlib.pyplot as plt
+from collections import defaultdict
 
 # Define paths
 cfg_path = "configs/new"
@@ -9,14 +11,16 @@ results_path = "sparsity_results/new"
 output_csv_path = "output_results.csv"
 scalesim_command_template = "python3 scalesim/scale.py -c {cfg_file} -t {csv_file} -p {results_path} -i gemm"
 
+# Knobs
+generate_cfg = False        # Generate .cfg files
+generate_csv = False        # Generate .csv files
+execute_commands = True    # Execute simulation commands
+generate_graphs = True     # Generate graphs
+
 # Ensure directories exist
 os.makedirs(cfg_path, exist_ok=True)
 os.makedirs(csv_path, exist_ok=True)
 os.makedirs(results_path, exist_ok=True)
-
-# Toggle knobs
-generate_cfg = True  # Switch to False to skip .cfg file generation
-generate_csv = True  # Switch to False to skip .csv file generation
 
 # Function to generate .cfg content
 def generate_cfg_content(array_height, array_width):
@@ -46,14 +50,15 @@ BlockSize : {array_height}
 InterfaceBandwidth: USER"""
 
 # Function to generate .csv content
-def generate_csv_content(array_height, array_width, sparsity):
+def generate_csv_content(array_height, sparsity):
     return f"L,M,N,K,Sparsity,\nL0,256,512,768,{sparsity},"
 
+# Main script
 # Main script
 def main():
     array_sizes = [(4, 4), (8, 8), (16, 16), (32, 32)]  # Possible ArrayHeight and ArrayWidth values
     commands = []  # To store all generated commands
-    results = []  # To store results for the output CSV
+    results = []  # To store results for plotting
 
     for ah, aw in array_sizes:
         # Generate .cfg file if enabled
@@ -63,21 +68,17 @@ def main():
             with open(cfg_filepath, "w") as cfg_file:
                 cfg_file.write(generate_cfg_content(ah, aw))
             print(f"Generated CFG: {cfg_filepath}")
-        else:
-            print(f"Skipping CFG generation for: {cfg_filepath}")
         
         # Generate .csv files for each sparsity ratio (1:M to M:M)
         for n in range(1, ah + 1):  # N varies from 1 to M where M=ArrayHeight
             sparsity_ratio = f"{n}:{ah}"
-            csv_filename = f"lws_gemm_{ah}x{aw}_{n}x{ah}.csv"
+            csv_filename = f"lws_gemm_{ah}x{aw}_{n}s{ah}.csv"
             csv_filepath = os.path.join(csv_path, csv_filename)
             
             if generate_csv:
                 with open(csv_filepath, "w") as csv_file:
-                    csv_file.write(generate_csv_content(ah, aw, sparsity_ratio))
+                    csv_file.write(generate_csv_content(ah, sparsity_ratio))
                 print(f"Generated CSV: {csv_filepath}")
-            else:
-                print(f"Skipping CSV generation for: {csv_filepath}")
             
             # Generate the simulation command
             command = scalesim_command_template.format(
@@ -87,39 +88,103 @@ def main():
             )
             commands.append((command, f"{ah}x{aw}", sparsity_ratio))  # Store command with context
 
-    print("\nExecuting Commands...\n")
-    
-    for command, array_size, sparsity_ratio in commands:
-        try:
-            # Execute the command
-            result = subprocess.run(command, shell=True, capture_output=True, text=True)
-            
-            # Parse the output to extract compute cycles
-            output = result.stdout
-            error = result.stderr
-            compute_cycles = None
-            if "COMPUTE CYCLES =" in output:
-                compute_cycles = output.split("COMPUTE CYCLES =")[1].strip().split()[0]
-            elif error:
-                print(f"Error encountered: {error}")
-
-            # Store result in the results list
-            if compute_cycles:
-                results.append([f"lws_{array_size}", array_size, sparsity_ratio, compute_cycles])
-                print(f"Extracted: {array_size}, {sparsity_ratio}, {compute_cycles}")
-            else:
-                print(f"Failed to extract compute cycles for command: {command}")
-        
-        except Exception as e:
-            print(f"Error executing command: {command}\n{e}")
+    # Execute commands if enabled
+    if execute_commands:
+        print("\nExecuting Commands...\n")
+        for command, array_size, sparsity_ratio in commands:
+            # print(f"Executing: {command}")
+            try:
+                result = subprocess.run(command, shell=True, capture_output=True, text=True)
+                output = result.stdout
+                compute_cycles = None
+                
+                # Extract COMPUTE CYCLES value
+                if "COMPUTE CYCLES =" in output:
+                    compute_cycles = output.split("COMPUTE CYCLES =")[1].strip().split()[0]
+                
+                if compute_cycles:
+                    results.append([f"lws_{array_size}", array_size, sparsity_ratio, int(compute_cycles)])
+                    print(f"Extracted Compute Cycles: {compute_cycles} for {array_size}, {sparsity_ratio}")
+                else:
+                    print(f"Failed to extract compute cycles for: {command}")
+            except Exception as e:
+                print(f"Error executing command: {e}")
     
     # Write results to output CSV
     with open(output_csv_path, "w", newline="") as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(["LWS", "Array Size", "Sparsity Ratio", "Compute Cycles"])  # Header
+        writer.writerow(["LWS", "Array Size", "Sparsity Ratio", "Compute Cycles"])
         writer.writerows(results)
     
     print(f"\nResults saved to {output_csv_path}")
+
+    # Generate graphs if enabled
+    if generate_graphs:
+        plot_results(output_csv_path)
+
+# Function to plot results
+def plot_results(output_csv_path):
+    # Read results from CSV file
+    results = []
+    with open(output_csv_path, "r") as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            results.append(row)
+
+    # Organize data by Array Size and Sparsity Ratio
+    data = defaultdict(lambda: defaultdict(int))  # {array_size: {sparsity_ratio: compute_cycles}}
+    for row in results:
+        array_size = row["Array Size"]
+        sparsity_ratio = row["Sparsity Ratio"]
+        compute_cycles = int(row["Compute Cycles"])
+        data[array_size][sparsity_ratio] = compute_cycles
+
+    # Sort array sizes and sparsity ratios
+    sorted_array_sizes = sorted(data.keys(), key=lambda x: int(x.split('x')[0]))  # Sort by first dimension
+    bar_width = 0.15  # Width of each bar
+    x_positions = []  # X positions of bars
+    sparsity_labels = []  # N:M labels
+    array_labels_positions = []  # For centering array size labels
+    current_x = 0  # X position counter
+
+    plt.figure(figsize=(15, 7))
+
+    # Generate bars
+    for array_size in sorted_array_sizes:
+        sparsity_ratios = sorted(data[array_size].keys(), key=lambda x: int(x.split(':')[0]))  # Sort by N
+        start_x = current_x  # Start position for this array size group
+
+        for sr in sparsity_ratios:
+            # Append bar and label
+            plt.bar(current_x, data[array_size][sr], width=bar_width, label=f"{sr}" if current_x == 0 else "")
+            x_positions.append(current_x)
+            sparsity_labels.append(sr)
+            current_x += bar_width  # Move to next position
+
+        # Calculate the center position of the group
+        end_x = current_x - bar_width
+        group_mid = (start_x + end_x) / 2
+        array_labels_positions.append((group_mid, array_size))
+
+        # Add space after each array size group
+        current_x += bar_width * 2
+
+    # Formatting x-axis
+    plt.xticks(x_positions, sparsity_labels, rotation=45)
+    plt.xlabel("Sparsity Ratios")
+    plt.ylabel("Compute Cycles")
+    plt.title("Compute Cycles for Different Array Sizes and Sparsity Ratios")
+    plt.yscale("log")
+
+    # Print array size labels centered below each group
+    for position, label in array_labels_positions:
+        plt.text(position, -0.1 * max(max(d.values()) for d in data.values()), label,
+                 ha='center', va='top', fontsize=10, fontweight='bold', transform=plt.gca().transData)
+
+    plt.tight_layout()
+    plt.savefig("lws_compute_cycles_plot.png")
+    print("Graph saved to lws_compute_cycles_plot.png")
+    plt.show()
 
 if __name__ == "__main__":
     main()
