@@ -207,60 +207,63 @@ class single_layer_sim:
         ifmap_demand_mat, filter_demand_mat, ofmap_demand_mat = \
                                                     self.compute_system.get_demand_matrices()
 
-        # 2. Setup the memory system and run the demands through it to find any memory bottleneck
-        #    and generate traces
+        print("COMPUTE CYCLES =", (ofmap_demand_mat.shape[0] - 1))
 
-        # 2.1 Setup the memory system if it was not setup externally
-        if not self.memory_system_ready_flag:
-            word_size = 1           # bytes, this can be incorporated in the config file
-            active_buf_frac = 0.5   # This can be incorporated in the config as well
+        if self.verbose:
+            # 2. Setup the memory system and run the demands through it to find any memory bottleneck
+            #    and generate traces
 
-            ifmap_buf_size_kb, filter_buf_size_kb, ofmap_buf_size_kb = self.config.get_mem_sizes()
-            ifmap_buf_size_bytes = 1024 * ifmap_buf_size_kb
-            filter_buf_size_bytes = 1024 * filter_buf_size_kb
-            ofmap_buf_size_bytes = 1024 * ofmap_buf_size_kb
+            # 2.1 Setup the memory system if it was not setup externally
+            if not self.memory_system_ready_flag:
+                word_size = 1           # bytes, this can be incorporated in the config file
+                active_buf_frac = 0.5   # This can be incorporated in the config as well
 
-            ifmap_backing_bw = 1
-            filter_backing_bw = 1
-            ofmap_backing_bw = 1
-            estimate_bandwidth_mode = False
-            if self.config.use_user_dram_bandwidth():
-                bws = self.config.get_bandwidths_as_list()
-                ifmap_backing_bw = bws[0]
-                filter_backing_bw = bws[0]
-                ofmap_backing_bw = bws[0]
+                ifmap_buf_size_kb, filter_buf_size_kb, ofmap_buf_size_kb = self.config.get_mem_sizes()
+                ifmap_buf_size_bytes = 1024 * ifmap_buf_size_kb
+                filter_buf_size_bytes = 1024 * filter_buf_size_kb
+                ofmap_buf_size_bytes = 1024 * ofmap_buf_size_kb
 
-            else:
-                arr_row, arr_col = self.config.get_array_dims()
-                estimate_bandwidth_mode = True
+                ifmap_backing_bw = 1
+                filter_backing_bw = 1
+                ofmap_backing_bw = 1
+                estimate_bandwidth_mode = False
+                if self.config.use_user_dram_bandwidth():
+                    bws = self.config.get_bandwidths_as_list()
+                    ifmap_backing_bw = bws[0]
+                    filter_backing_bw = bws[0]
+                    ofmap_backing_bw = bws[0]
 
-                # The number 10 elems per cycle is arbitrary
-                ifmap_backing_bw = 10
-                filter_backing_bw = 10
-                ofmap_backing_bw = arr_col
+                else:
+                    arr_row, arr_col = self.config.get_array_dims()
+                    estimate_bandwidth_mode = True
 
-            self.memory_system.set_params(
-                    word_size=word_size,
-                    ifmap_buf_size_bytes=ifmap_buf_size_bytes,
-                    filter_buf_size_bytes=filter_buf_size_bytes,
-                    ofmap_buf_size_bytes=ofmap_buf_size_bytes,
-                    rd_buf_active_frac=active_buf_frac, wr_buf_active_frac=active_buf_frac,
-                    ifmap_backing_buf_bw=ifmap_backing_bw,
-                    filter_backing_buf_bw=filter_backing_bw,
-                    ofmap_backing_buf_bw=ofmap_backing_bw,
-                    verbose=self.verbose,
-                    estimate_bandwidth_mode=estimate_bandwidth_mode
-            )
+                    # The number 10 elems per cycle is arbitrary
+                    ifmap_backing_bw = 10
+                    filter_backing_bw = 10
+                    ofmap_backing_bw = arr_col
 
-        # 2.2 Install the prefetch matrices to the read buffers to finish setup
-        if self.config.use_user_dram_bandwidth() :
-            self.memory_system.set_read_buf_prefetch_matrices(
-                                                        ifmap_prefetch_mat=ifmap_prefetch_mat,
-                                                        filter_prefetch_mat=filter_prefetch_mat
-                                                             )
-        # self.memory_system.service_memory_requests(ifmap_demand_mat,
-        #                                             filter_demand_mat,
-        #                                             ofmap_demand_mat)
+                self.memory_system.set_params(
+                        word_size=word_size,
+                        ifmap_buf_size_bytes=ifmap_buf_size_bytes,
+                        filter_buf_size_bytes=filter_buf_size_bytes,
+                        ofmap_buf_size_bytes=ofmap_buf_size_bytes,
+                        rd_buf_active_frac=active_buf_frac, wr_buf_active_frac=active_buf_frac,
+                        ifmap_backing_buf_bw=ifmap_backing_bw,
+                        filter_backing_buf_bw=filter_backing_bw,
+                        ofmap_backing_buf_bw=ofmap_backing_bw,
+                        verbose=self.verbose,
+                        estimate_bandwidth_mode=estimate_bandwidth_mode
+                )
+
+            # 2.2 Install the prefetch matrices to the read buffers to finish setup
+            if self.config.use_user_dram_bandwidth() :
+                self.memory_system.set_read_buf_prefetch_matrices(
+                                                            ifmap_prefetch_mat=ifmap_prefetch_mat,
+                                                            filter_prefetch_mat=filter_prefetch_mat
+                                                                 )
+            self.memory_system.service_memory_requests(ifmap_demand_mat,
+                                                        filter_demand_mat,
+                                                        ofmap_demand_mat)
 
         self.runs_ready = True
 

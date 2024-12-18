@@ -765,7 +765,7 @@ def skew_matrix_row_sparsity(input_matrix, arr_row, block_size):
     num_block_cols = (len(repeated_blocks[0][0]) * block_size) // num_tiles
     # print("num_block_cols = (len(repeated_blocks[0]) * block_size) // num_tiles")
     # print(num_block_cols, "=" ,len(repeated_blocks[0][0]), "*" ,block_size ,"//", num_tiles)
-    print(num_block_rows, num_block_cols)
+    # print(num_block_rows, num_block_cols)
     for i in range(num_block_rows + arr_row - 1):
         row = []
         for j in range(len(repeated_blocks[0])):

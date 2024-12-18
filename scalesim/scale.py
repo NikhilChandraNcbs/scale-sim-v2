@@ -36,7 +36,7 @@ if __name__ == '__main__':
     if inp_type == 'gemm':
         GEMM_INPUT = True
 
-    s = scalesim(save_disk_space=True, verbose=True,
+    s = scalesim(save_disk_space=True, verbose=False,
                  config=config,
                  topology=topology,
                  input_type_gemm=GEMM_INPUT

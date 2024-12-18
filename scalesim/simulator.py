@@ -150,7 +150,8 @@ class simulator:
 
         self.all_layer_run_done = True
 
-        self.generate_reports()
+        if self.verbose:
+            self.generate_reports()
 
     #
     def generate_reports(self):
