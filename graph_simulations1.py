@@ -1,5 +1,5 @@
 """
-This file shall be used for studies related to layer-wise sparsity - variation of block size
+This file shall be used for studies related to layer-wise sparsity - variation of block size with fixed array size
 """
 
 import os
