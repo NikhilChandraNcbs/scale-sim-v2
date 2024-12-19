@@ -142,11 +142,13 @@ def plot_cycles(on_chip_memory_sizes, cycles_dict, conv_groups):
 
     # Set x-axis to log scale
     plt.xscale('log')
+    # plt.yscale('log')
     plt.xlabel("On-Chip Memory (kB)")
     plt.ylabel("Total Compute Cycles")
     plt.title("Total Compute Cycles vs On-Chip Memory (Scatter and Error Plots)")
     plt.legend()
     plt.grid(True)
+    plt.savefig("lws_resnet18_computecycles.png", dpi=300, bbox_inches="tight")
     plt.show()
 
 def plot_cycles_new(on_chip_memory_sizes, cycles_dict, conv_groups):
@@ -170,6 +172,7 @@ def plot_cycles_new(on_chip_memory_sizes, cycles_dict, conv_groups):
 
     # Set x-axis to log scale
     plt.xscale('log')
+    # plt.yscale('log')
     plt.xlabel("On-Chip Memory (kB)")
     plt.ylabel("Total Compute Cycles")
     plt.title("Total Compute Cycles vs On-Chip Memory (Scatter and Error Plots)")
@@ -177,11 +180,78 @@ def plot_cycles_new(on_chip_memory_sizes, cycles_dict, conv_groups):
     plt.grid(True)
     plt.show()
 
+# Function to plot scatter and error plots
+def plot_cycles_alpha(on_chip_memory_sizes, cycles_dict, conv_groups):
+    # Set up figure
+    plt.figure(figsize=(10, 6))
+
+    # Predefined line styles and markers
+    line_styles = ['-', '--', '-.', ':']
+    markers = ['o', 's', 'D', '^', 'v', 'p', 'P', '*', 'x', '+']
+
+    # Loop over each model and sparsity combination and plot
+    for i, (model_size_sparsity, cycles_by_memory) in enumerate(cycles_dict.items()):
+        # Extract the means and standard deviations for each memory size
+        means = [np.mean(list(cycles.values())) for cycles in cycles_by_memory]
+        positive_errors = [max(list(cycles.values())) - np.mean(list(cycles.values())) for cycles in cycles_by_memory]
+        negative_errors = [np.mean(list(cycles.values())) - min(list(cycles.values())) for cycles in cycles_by_memory]
+        asymmetric_errors = [negative_errors, positive_errors]
+
+        # Use a unique color, line style, and marker for each model
+        color = f"C{i % 10}"  # Use default color cycle
+        line_style = line_styles[i % len(line_styles)]
+        marker = markers[i % len(markers)]
+
+        # Add a slight horizontal offset to avoid overlap (only for visualization)
+        x_offsets = np.linspace(-0.02, 0.02, len(cycles_dict))  # Small offset range
+        x_values = [x + x_offsets[i] for x in on_chip_memory_sizes]
+
+        # Plot fully opaque line connecting markers
+        plt.plot(
+            x_values, 
+            means, 
+            linestyle=line_style, 
+            marker=marker, 
+            label=model_size_sparsity, 
+            linewidth=2, 
+            markersize=6, 
+            alpha=1.0, 
+            color=color
+        )
+
+        # Plot semi-transparent vertical error bars
+        plt.errorbar(
+            x_values, 
+            means, 
+            yerr=asymmetric_errors, 
+            fmt='none', 
+            capsize=5, 
+            elinewidth=1.5, 
+            alpha=0.5, 
+            color=color
+        )
+
+        # Plot individual points (scatter) for each conv group
+        # for i, memory in enumerate(on_chip_memory_sizes):
+        #     for conv_group in conv_groups:
+        #         plt.scatter(memory, cycles_by_memory[i][conv_group], alpha=0.3)
+
+    # Set x-axis to log scale
+    # plt.xscale('log')
+    plt.yscale('log')
+    plt.xlabel("On-Chip Memory (kB)")
+    plt.ylabel("Total Compute Cycles")
+    plt.title("Total Compute Cycles vs On-Chip Memory (Scatter and Error Plots)")
+    plt.legend()
+    plt.grid(True)
+    plt.savefig('lws_resnet18_computecycles.png', dpi=300, bbox_inches='tight', format='png')
+    # plt.show()
+
 if __name__ == '__main__':
     models = ['Resnet18'] # ['resnet18', 'alexnet']
-    sizes = ['16kb', '64kb', '256kb', '1mb', '5mb', '10mb', '50mb', '100mb'] # ['1kb', '16kb', '64kb', '256kb', '1mb', '5mb', '10mb', '50mb', '100mb']
+    sizes = ['16kb', '64kb', '256kb', '1mb'] # ['1kb', '16kb', '64kb', '256kb', '1mb', '5mb', '10mb', '50mb', '100mb']
     sparsities = ['1s4', '2s4', '4s4']
-    on_chip_memory_sizes = [16, 64, 256, 1024, 5120, 10240, 51200, 102400] # [1, 16, 64, 256, 1024, 5120, 10240, 51200, 102400]  # X-axis
+    on_chip_memory_sizes = [16, 64, 256, 1024] # [1, 16, 64, 256, 1024, 5120, 10240, 51200, 102400]  # X-axis
     conv_groups = ["Conv1", "Conv2", "Conv3", "Conv4", "Conv5", 'FC']
 
     cycles_dict = {}
@@ -213,4 +283,4 @@ if __name__ == '__main__':
     pprint.pprint(cycles_dict)
 
     # Plot the results
-    plot_cycles(on_chip_memory_sizes, cycles_dict, conv_groups)
+    plot_cycles_alpha(on_chip_memory_sizes, cycles_dict, conv_groups)
