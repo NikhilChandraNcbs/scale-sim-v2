@@ -293,7 +293,8 @@ def plot_cycles_alpha(on_chip_memory_sizes, cycles_dict, conv_groups):
             means, 
             yerr=asymmetric_errors, 
             fmt='none', 
-            capsize=5, 
+            capsize=10, 
+            mew=1.5,
             elinewidth=1.5, 
             color=color
         )
