@@ -1,0 +1,5 @@
+LWS,Array Size,Sparsity Ratio,Compute Cycles
+lws_4x4,4x4,0:4,27000831
+lws_8x8,8x8,0:8,7143423
+lws_16x16,16x16,0:16,1982463
+lws_32x32,32x32,0:32,593919

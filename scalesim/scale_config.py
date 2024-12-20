@@ -110,8 +110,8 @@ class scale_config:
                 self.sparsity_block_size = int(config.get(section, 'BlockSize'))
                 assert self.sparsity_block_size <= self.array_rows, "ERROR: Invalid block size"
 
-                ratio_percentages = config.get(section, 'RatioPercentages')
-                self.ratio_percentages = [int(num.strip()) for num in ratio_percentages.split(",")]
+                # ratio_percentages = config.get(section, 'RatioPercentages')
+                # self.ratio_percentages = [int(num.strip()) for num in ratio_percentages.split(",")]
 
         self.valid_conf_flag = True
 

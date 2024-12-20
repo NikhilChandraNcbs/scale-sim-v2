@@ -311,15 +311,12 @@ class operand_matrix(object):
                 # print(self.sparse_filter_array)
 
             else:
-                '''
                 ratio_M = self.config.sparsity_block_size
                 # print("else part")
                 # print(ratio_M)
                 num_repeats = (self.filter_addr_matrix.shape[0] + ratio_M - 1) // ratio_M
                 # print(num_repeats)
                 columns = []
-                ratio_percentages = self.config.ratio_percentages
-                assert 1==0, "STOP"
                 for col_idx in range(self.filter_addr_matrix.shape[1]):
                     ratio_N = np.random.randint(1, ratio_M // 2 + 1)
                     # print(ratio_N)
@@ -331,6 +328,7 @@ class operand_matrix(object):
                     columns.append(column_values)
                 self.sparse_filter_array = np.column_stack(columns)
                 # print(self.sparse_filter_array)
+                
                 '''
                 # import numpy as np
 
@@ -366,6 +364,7 @@ class operand_matrix(object):
                 with np.printoptions(threshold=np.inf, linewidth=200, suppress=True):
                     print(self.sparse_filter_array)
                 # assert 1==0, "STOP"
+                '''
 
 
             self.filter_addr_matrix = np.multiply(self.filter_addr_matrix, self.sparse_filter_array)
