@@ -360,42 +360,42 @@ def plot_results_combined_scatter(csv_file1, csv_file1_rws, csv_file2, csv_file2
             # Scatter for output_results1.csv
             plt.scatter(
                 current_x, data1[array_size][sr],
-                color='tab:blue', alpha=1, label="File 1" if current_x == 0 else "", s=50
+                color='tab:blue', alpha=1, label="File 1" if current_x == 0 else "", s=50, marker='^'
             )
             # Scatter for output_results2.csv
             plt.scatter(
                 current_x, data1_rws[array_size][sr],
-                color='tab:blue', alpha=0.5, label="File 1 RWS" if current_x == 0 else "", s=50
+                color='tab:blue', alpha=1, label="File 1 RWS" if current_x == 0 else "", s=50, marker='v'
             )
             # Scatter for output_results1.csv
             plt.scatter(
                 current_x, data2[array_size][sr],
-                color='tab:orange', alpha=1, label="File 2" if current_x == 0 else "", s=50
+                color='tab:orange', alpha=1, label="File 2" if current_x == 0 else "", s=50, marker='^'
             )
             # Scatter for output_results2.csv
             plt.scatter(
                 current_x, data2_rws[array_size][sr],
-                color='tab:orange', alpha=0.5, label="File 2 RWS" if current_x == 0 else "", s=50
+                color='tab:orange', alpha=1, label="File 2 RWS" if current_x == 0 else "", s=50, marker='v'
             )
             # Scatter for output_results1.csv
             plt.scatter(
                 current_x, data3[array_size][sr],
-                color='tab:green', alpha=1, label="File 3" if current_x == 0 else "", s=50
+                color='tab:green', alpha=1, label="File 3" if current_x == 0 else "", s=50, marker='^'
             )
             # Scatter for output_results2.csv
             plt.scatter(
                 current_x, data3_rws[array_size][sr],
-                color='tab:green', alpha=0.5, label="File 3 RWS" if current_x == 0 else "", s=50
+                color='tab:green', alpha=1, label="File 3 RWS" if current_x == 0 else "", s=50, marker='v'
             )
             # Scatter for output_results1.csv
             plt.scatter(
                 current_x, data4[array_size][sr],
-                color='tab:red', alpha=1, label="File 4" if current_x == 0 else "", s=50
+                color='tab:red', alpha=1, label="File 4" if current_x == 0 else "", s=50, marker='^'
             )
             # Scatter for output_results2.csv
             plt.scatter(
                 current_x, data4_rws[array_size][sr],
-                color='tab:red', alpha=0.5, label="File 4 RWS" if current_x == 0 else "", s=50
+                color='tab:red', alpha=1, label="File 4 RWS" if current_x == 0 else "", s=50, marker='v'
             )
 
             x_positions.append(current_x)
