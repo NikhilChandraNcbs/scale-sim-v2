@@ -4,10 +4,12 @@ on:
     branches: 
       - main
       - dev
+      - main-play
   pull_request:
     branches:
      - main 
      - dev
+     - main-play
 jobs:
   build:
     runs-on: ubuntu-latest
