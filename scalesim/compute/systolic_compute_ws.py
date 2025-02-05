@@ -259,8 +259,12 @@ class systolic_compute_ws:
         ifmap_demand_matrix_list = []
 
         for fc in range(self.col_fold):
+            for_loop_range = range(self.row_fold)
+            if self.config.sparsity_support is True:
+                for_loop_range = range(self.row_fold_demand_matrices)
             # for fr in range(self.row_fold):
-            for fr in range(self.row_fold_demand_matrices):
+            # for fr in range(self.row_fold_demand_matrices):
+            for fr in for_loop_range:
                 if self.config.sparsity_support and self.config.sparsity_optimized_mapping:
                     col_start_id = fr * (self.arr_row * 2) # Since we need 2 tiles
                     col_end_idx = min(col_start_id + (self.arr_row * 2), self.Sr)
@@ -357,8 +361,12 @@ class systolic_compute_ws:
 
         filter_demand_matrix_list = []
         for fc in range(self.col_fold):
+            for_loop_range = range(self.row_fold)
+            if self.config.sparsity_support is True:
+                for_loop_range = range(self.row_fold_demand_matrices)
             # for fr in range(self.row_fold):
-            for fr in range(self.row_fold_demand_matrices):
+            # for fr in range(self.row_fold_demand_matrices):
+            for fr in for_loop_range:
                 row_start_id = fr * self.arr_row
                 # row_end_idx = min(row_start_id + self.arr_row, self.Sr)
                 row_end_idx = min(row_start_id + self.arr_row, self.filter_op_mat.shape[0])
@@ -447,8 +455,12 @@ class systolic_compute_ws:
         ofmap_demand_matrix_list = []
 
         for fc in range(self.col_fold):
+            for_loop_range = range(self.row_fold)
+            if self.config.sparsity_support is True:
+                for_loop_range = range(self.row_fold_demand_matrices)
             # for fr in range(self.row_fold):
-            for fr in range(self.row_fold_demand_matrices):
+            # for fr in range(self.row_fold_demand_matrices):
+            for fr in for_loop_range:
                 col_start_id = fc * self.arr_col
                 col_end_idx = min(col_start_id + self.arr_col, self.Sc) # self.Sc
                 col_delta = self.arr_col - (col_end_idx - col_start_id)
