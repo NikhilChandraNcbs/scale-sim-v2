@@ -23,9 +23,9 @@ jobs:
     - name: Install SCALE-Sim
       # run: source venv/bin/activate && python setup.py install
       run: |
-      source venv/bin/activate
-      pip install --upgrade pip setuptools wheel
-      python setup.py install
+        source venv/bin/activate
+        pip install --upgrade pip setuptools wheel
+        python setup.py install
     - name: Install tkinter
       run: sudo apt-get install python3-tk
     - name: Linting
