@@ -1,5 +1,10 @@
+# Author: Nikhil Chandra
+# Github: @NikhilChandraNcbs
+# File: Scatter compute cycle plots for ViT models
+
 """
 This file shall be used for studies related to layer-wise sparsity - variation of block size with fixed array size
+Scatter plots
 """
 
 import os
@@ -12,16 +17,16 @@ from collections import defaultdict
 cfg_path = "configs/new"
 csv_path = "topologies/sparsity/new"
 results_path = "sparsity_results/new"
-output_csv_path = "rws_output_results_vith.csv"
-output_plot_path = "rws_compute_cycles_plot_vith.png"
+# output_csv_path = "rws_output_results_vith.csv"
+# output_plot_path = "rws_compute_cycles_plot_vith.png"
 scalesim_command_template = "python3 scalesim/scale.py -c {cfg_file} -t {csv_file} -p {results_path} -i gemm"
 # scalesim_command_template = "python3 scalesim/scale.py -c {cfg_file} -t {csv_file} -p {results_path}"
 
 # Knobs
-generate_cfg = False        # Generate .cfg files
+generate_cfg = True        # Generate .cfg files
 generate_csv = False        # Generate .csv files
 execute_commands = False    # Execute simulation commands
-generate_graphs = True     # Generate graphs
+generate_graphs = False     # Generate graphs
 
 # Ensure directories exist
 os.makedirs(cfg_path, exist_ok=True)
@@ -51,6 +56,7 @@ SparsitySupport : true
 SparseRep : ellpack_block
 OptimizedMapping : false
 BlockSize : {array_height}
+RandomNumberGeneratorSeed : 40
 
 [run_presets]
 InterfaceBandwidth: USER"""
@@ -65,7 +71,6 @@ def generate_csv_content(array_height, sparsity):
 #     return f"""Layer name,IFMAP Height,IFMAP Width,Filter Height,Filter Width,Channels,Num Filter,Strides,Sparsity,
 # Conv1,224,224,11,11,3,96,4,{sparsity},"""
 
-# Main script
 # Main script
 def main():
     array_sizes = [(4, 4), (8, 8), (16, 16), (32, 32)]  # Possible ArrayHeight and ArrayWidth values
@@ -147,7 +152,7 @@ def main():
             "rws_output_results_vitl.csv", 
             "output_results_vith.csv", 
             "rws_output_results_vith.csv", 
-            "overlapping_compute_cycles_scatter_vits.png")
+            "overlapping_compute_cycles_scatter_vits_rebuttal.png")
 
 # Function to plot results
 def plot_results(output_csv_path, output_plot_path):
